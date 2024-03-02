@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\DB\Db; // Importer la classe Db depuis le namespace App\DB
+use App\Core\Db; // Importer la classe Db depuis le namespace App\DB
 
 class Model extends Db // Déclarer la classe Model qui étend la classe Db
 {
@@ -15,7 +15,7 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
   }
 
   // Méthode pour trouver tous les enregistrements dans la table
-  public function findAll(): string // Déclarer la méthode publique findAll()
+  public function findAll(): array // Déclarer la méthode publique findAll()
   {
     // Utiliser la méthode sql() pour exécuter la requête SQL et récupérer tous les résultats
     return $this->sql('SELECT * FROM ' . $this->table)->fetchAll();
@@ -41,7 +41,7 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     return $this->sql('SELECT * FROM ' . $this->table . ' WHERE ' . $liste_champs, $values)->fetchAll();
   }
 
-  public function find(int $id): string
+  public function find(int $id): array
   {
     return $this->sql("SELECT * FROM {$this->table} WHERE id = $id")->fetch();
   }
@@ -116,7 +116,7 @@ public function delete(int $id): object
   }
 
 
-  public function hydrate(array $data): self
+  public function setter(array $data): self
   {
     foreach ($data as $key => $value) {
       // on réccup!re le nom du setter correspondant à la clé (key)

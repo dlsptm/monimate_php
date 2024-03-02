@@ -18,15 +18,14 @@ class Autoloader
       $class = str_replace(__NAMESPACE__.'\\','', $class);
 
 
-
       $require = __DIR__ . DIRECTORY_SEPARATOR . $class . ".php";
 
 
       $final_require = str_replace("\\", DIRECTORY_SEPARATOR, $require);
 
-
+      if (file_exists($final_require)) {
       require_once $final_require;
-
+      }
     });
   }
 }
