@@ -46,13 +46,13 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     return $this->sql("SELECT * FROM {$this->table} WHERE id = $id")->fetch();
   }
 
-  public function insert(Model $model): object // Déclarer la méthode publique findBy() avec un paramètre de tableau $params
+  public function insert(): object // Déclarer la méthode publique findBy() avec un paramètre de tableau $params
   {
     $champs = []; 
     $inter = [];
     $values = [];
 
-    foreach ($model as $champ => $value) {
+    foreach ($this as $champ => $value) {
       // INSERT INTO 
 
       if ($value != null && $champ != 'db' && $champ != 'table') {
@@ -71,12 +71,12 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
   }
 
 
-  public function update(int $id, Model $model): object
+  public function update(int $id): object
 {
     $champs = []; 
     $values = [];
 
-    foreach ($model as $champ => $value) {
+    foreach ($this as $champ => $value) {
         // Update 
 
         if ($value !== null && $champ !== 'db' && $champ !== 'table') {
@@ -116,7 +116,7 @@ public function delete(int $id): object
   }
 
 
-  public function setter(array $data): self
+  public function setter($data): self
   {
     foreach ($data as $key => $value) {
       // on réccup!re le nom du setter correspondant à la clé (key)

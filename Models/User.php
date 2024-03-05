@@ -17,6 +17,17 @@
       $this->table = strtolower(str_replace(__NAMESPACE__.'\\', '', __CLASS__));
     }
 
+    /**
+     * reccupération d'un user à partir de son mail
+     *
+     * @param string $email
+     * @return void
+     */
+    public function findOnebyEmail(string $email)
+    {   
+
+        return $this->sql("SELECT * FROM $this->table WHERE email = ?", [$email]);
+    }
 
     /**
      * Get the value of id
