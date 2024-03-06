@@ -1,12 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
+<?php if(isset($_SESSION['error']) && !empty($_SESSION["error"])): ?>
+  <div class="alart alert-danger" role='alert'>
+    <?php echo $_SESSION["error"] ; unset($_SESSION['error']);?>
+  </div>
+  <?php
+    elseif(isset($_SESSION['success']) && !empty($_SESSION["success"])):?>
+      <div class="alert alert-success" role='alert'>
+    <?php echo $_SESSION["success"] ; unset($_SESSION['success']);?>
+  </div>
+<?php endif?>
+
+<h1>S'inscrire</h1>
 <?= $form ; ?>
-  
-</body>
-</html>
+  <a href="index?p=security/login">Déjà un compte ?</a>

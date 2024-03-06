@@ -13,6 +13,9 @@ class Router
   public function start()
   {
 
+    // on start la session
+    session_start();
+
     // on retire le trailing slash éventuel de l'url
     // on récupère l'url
     $uri = $_SERVER['REQUEST_URI'];

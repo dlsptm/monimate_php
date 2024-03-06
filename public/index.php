@@ -13,4 +13,5 @@ use App\Core\Router;
 
   $main = new Router();
   $main->start();
+
 ?>

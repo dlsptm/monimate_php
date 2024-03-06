@@ -9,8 +9,6 @@
   </div>
 <?php endif?>
 
-<h1>Connexion</h1>
+<h1>Modifier votre mot de passe</h1>
 <?= $form ; ?>
-<a href="index?p=security/register">Pas de compte ?</a>
-<a href="index?p=security/reset">Oublié votre mot de passe ?</a>
-
+  

@@ -55,7 +55,7 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     foreach ($this as $champ => $value) {
       // INSERT INTO 
 
-      if ($value != null && $champ != 'db' && $champ != 'table') {
+      if ($value !== null && $champ != 'db' && $champ != 'table') {
         $champs[] = "$champ";
         $inter[] = "?";
         $values[] = $value; // Ajouter la valeur à la liste des valeurs
@@ -129,6 +129,24 @@ public function delete(int $id): object
       if (method_exists($this, $setter)) {
         // On appelle le setter
         $this->$setter($value);
+      }
+    }
+    return $this;
+  }
+
+  public function getter($data): self
+  {
+    foreach ($data as $key => $value) {
+      // on réccup!re le nom du setter correspondant à la clé (key)
+      // titre -> getTitre
+
+      $getter = 'get' . ucfirst($key);
+
+      // on vérifie si le setter existe
+
+      if (method_exists($this, $getter)) {
+        // On appelle le setter
+        $this->$getter($value);
       }
     }
     return $this;

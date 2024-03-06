@@ -5,6 +5,7 @@
   class User extends Model
   {
     protected $id;
+    protected $username;
     protected $email;
     protected $password;
     protected $roles;
@@ -15,7 +16,10 @@
     public function __construct() {
       parent::__construct(); // Appeler le constructeur de la classe parente Model
       $this->table = strtolower(str_replace(__NAMESPACE__.'\\', '', __CLASS__));
-    }
+      $this->roles = json_encode(['ROLE_USER']);
+      $this->active = 0;
+      $this->created_at = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('Y-m-d H:i:s'); // Date actuelle au format MySQL datetime avec l'heure de Paris
+      }
 
     /**
      * reccupération d'un user à partir de son mail
@@ -26,7 +30,59 @@
     public function findOnebyEmail(string $email)
     {   
 
-        return $this->sql("SELECT * FROM $this->table WHERE email = ?", [$email]);
+        return $this->sql("SELECT * FROM $this->table WHERE email = ?", [$email])->fetch();
+    }
+
+        public static function emailExists(string $email)
+    {
+        // Vérifie si l'email existe déjà dans la base de données
+        $userModel = new User(); // Supposons que votre modèle d'utilisateur s'appelle User
+        $user = $userModel->findOneByEmail($email);
+
+        if($user) {
+            return true; // L'email existe déjà dans la base de données
+        } 
+    
+        return false; // L'email n'existe pas dans la base de données
+    
+    }
+
+    public function findOnebyUsername(string $username)
+    {   
+
+        return $this->sql("SELECT * FROM $this->table WHERE username = ?", [$username])->fetch();
+    }
+
+    public static function usernameExists(string $username)
+    {
+        // Vérifie si l'email existe déjà dans la base de données
+        $userModel = new User(); // Supposons que votre modèle d'utilisateur s'appelle User
+        $user = $userModel->findOnebyUsername($username);
+        if($user) {
+            return true; // Le nom d'utilisateur existe déjà dans la base de données
+        } 
+    
+        return false; // Le nom d'utilisateur n'existe pas dans la base de données      
+    }
+
+    public function findOnebyToken(string $token)
+    {   
+
+        return $this->sql("SELECT * FROM $this->table WHERE token = ?", [$token])->fetch();
+    }
+
+    /**
+     * Création de la session utilisateur
+     *
+     * @return void
+     */
+    public function getSession ()
+    {
+        $_SESSION['user'] = [
+            'id' => $this->id,
+            'username' => $this->username,
+            'email' => $this->email
+        ];
     }
 
     /**
@@ -41,6 +97,21 @@
      */
     public function setId($id): self {
         $this->id = $id;
+        return $this;
+    }
+
+        /**
+     * Get the value of username
+     */
+    public function getUsername() {
+        return $this->username;
+    }
+
+    /**
+     * Set the value of username
+     */
+    public function setUsername($username): self {
+        $this->username = $username;
         return $this;
     }
 
@@ -133,5 +204,7 @@
         $this->created_at = $created_at;
         return $this;
     }
+
+
   }
 

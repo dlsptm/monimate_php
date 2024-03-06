@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Models\User;
 
 class Form
 {
@@ -26,23 +27,16 @@ class Form
    */
   public static function validate(array $form, array $fields)
   {
-    foreach ($fields as $field) {
-      // Vérifie si le champ est présent dans le formulaire
-      if (!isset($form[$field]) || empty($form[$field])) {
-        return false; // Champ manquant
+      foreach ($fields as $field) {
+          // Vérifie si le champ est présent dans le formulaire
+          if (!isset($form[$field]) || empty($form[$field])) {
+              return false; // Champ manquant
+          }
       }
-
-      if (isset($form['email']) && !filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
-        return false; // Email invalide
-      }
-
-      if (isset($form['password'], $form['confirm']) && strlen($form['password']) < 3 && !preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-+]).{3,}$/", $form['password'] && $form['password'] !== $form['confirm'])) {
-        return false; // Password invalide
-      }
-    }
-
-    return true; // Toutes les validations passées
+  
+      return true; // Toutes les validations passées
   }
+  
 
   /**
    * Ajout les attributs envoyé à la balise
@@ -168,7 +162,7 @@ class Form
     return $this;
   }
 
-  public function addSubmit(string $text, array $attributes=[]): self
+  public function addSubmit(string $text, array $attributes = []): self
   {
     $this->formCode .= "<button ";
 
