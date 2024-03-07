@@ -2,6 +2,8 @@
   
   namespace App\Models;
 
+use PDO;
+
   class Category extends Model
  {
     protected $id;
@@ -13,6 +15,32 @@
       // $this->table = strtolower(str_replace(__NAMESPACE__.'\\', '', __CLASS__));
 
       $this->table = strtolower(str_replace(__NAMESPACE__.'\\', '', __CLASS__));
+    }
+
+    public function findAllbyTitle()
+    {   
+
+        return $this->sql("SELECT title FROM $this->table ")->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function findOnebyTitle(string $title)
+    {   
+
+        return $this->sql("SELECT * FROM $this->table WHERE title = ?", [$title])->fetch();
+    }
+
+        public static function titleExists(string $title)
+    {
+        // Vérifie si l'title existe déjà dans la base de données
+        $categoryModel = new Category(); // Supposons que votre modèle d'utilisateur s'appelle category
+        $category = $categoryModel->findOnebyTitle($title);
+
+        if($category) {
+            return true; // L'title existe déjà dans la base de données
+        } 
+    
+        return false; // L'title n'existe pas dans la base de données
+    
     }
 
     /**

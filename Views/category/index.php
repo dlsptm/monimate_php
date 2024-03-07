@@ -1,13 +1,45 @@
-<h1>Salut</h1>
-
+<?php if (isset($_SESSION['error']) && !empty($_SESSION["error"])) : ?>
+  <div class="alart alert-danger" role='alert'>
+    <?php echo $_SESSION["error"];
+    unset($_SESSION['error']); ?>
+  </div>
 <?php
-  foreach ($categories as $category) :
-?>
-  <h2><?= $category->title ; ?></h2>
-  <p><?= $category->icon ; ?></p>
-  <a href="index?p=category/update/<?= $category->id ; ?>">Modifier</a>
-  <!-- <a href="/category/delete/<?= $category->id ; ?>">Supprimer</a> -->
+elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
+  <div class="alert alert-success" role='alert'>
+    <?php echo $_SESSION["success"];
+    unset($_SESSION['success']); ?>
+  </div>
+<?php endif ?>
+<div class="container">
+  <h1>Catégories</h1>
 
-<?php
-  endforeach
-?>
+  <?= $form ?>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Icon</th>
+        <th scope="col">Titre</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($categories as $category) : ?>
+        <tr>
+          <th scope="row"><?= $category->id; ?>
+          </th>
+          <td><img src="<?= "./assets/upload/categories_icon/$category->icon"; ?>" alt="<?= $category->title;; ?>" width='50'>
+          </td>
+          <td><?= $category->title; ?>
+          </td>
+          <td>
+            <a href=<?= "index?p=category/index/$category->id"; ?> class='btn btn-info'>Modifier</a>
+            <a href=<?= "index?p=category/delete/$category->id"; ?> class='btn btn-warning'>Supprimer</a>
+          </td>
+        </tr>
+      <?php endforeach ?>
+    </tbody>
+  </table>
+
+</div>

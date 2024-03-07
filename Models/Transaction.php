@@ -6,18 +6,20 @@
   {
     protected $id;
     protected $category_id;
-    protected $type_id;
-    protected $option_id;
     protected $user_id;
     protected $invoice_id;
     protected $title;
     protected $amount;
     protected $location;
+    protected $payment_option;
+    protected $is_monthly;
     protected $created_at;
 
     public function __construct() {
       parent::__construct(); // Appeler le constructeur de la classe parente Model
       $this->table = strtolower(str_replace(__NAMESPACE__.'\\', '', __CLASS__));
+      $this->created_at = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('d-m-Y'); // Date actuelle au format MySQL datetime avec l'heure de Paris
+
     }
 
 
@@ -52,35 +54,7 @@
         return $this;
     }
 
-    /**
-     * Get the value of type_id
-     */
-    public function getTypeId() {
-        return $this->type_id;
-    }
-
-    /**
-     * Set the value of type_id
-     */
-    public function setTypeId($type_id): self {
-        $this->type_id = $type_id;
-        return $this;
-    }
-
-    /**
-     * Get the value of option_id
-     */
-    public function getOptionId() {
-        return $this->option_id;
-    }
-
-    /**
-     * Set the value of option_id
-     */
-    public function setOptionId($option_id): self {
-        $this->option_id = $option_id;
-        return $this;
-    }
+    
 
     /**
      * Get the value of user_id
@@ -169,6 +143,36 @@
      */
     public function setCreatedAt($created_at): self {
         $this->created_at = $created_at;
+        return $this;
+    }
+
+    /**
+     * Get the value of payment_option
+     */
+    public function getPaymentOption() {
+        return $this->payment_option;
+    }
+
+    /**
+     * Set the value of payment_option
+     */
+    public function setPaymentOption($payment_option): self {
+        $this->payment_option = $payment_option;
+        return $this;
+    }
+
+    /**
+     * Get the value of is_monthly
+     */
+    public function getIsMonthly() {
+        return $this->is_monthly;
+    }
+
+    /**
+     * Set the value of is_monthly
+     */
+    public function setIsMonthly($is_monthly): self {
+        $this->is_monthly = $is_monthly;
         return $this;
     }
   }

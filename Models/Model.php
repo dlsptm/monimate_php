@@ -41,7 +41,7 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     return $this->sql('SELECT * FROM ' . $this->table . ' WHERE ' . $liste_champs, $values)->fetchAll();
   }
 
-  public function find(int $id): array
+  public function find(int $id)
   {
     return $this->sql("SELECT * FROM {$this->table} WHERE id = $id")->fetch();
   }
@@ -69,6 +69,21 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     // Utiliser la méthode sql() pour exécuter la requête SQL avec les conditions WHERE
     return $this->sql('INSERT INTO '. $this->table . ' (' . $liste_champs .') VALUES(' . $liste_inter.')', $values);
   }
+
+    // Modèle Transaction
+  public function findAllWithJoin( string $columns, string $joinTable, string $joinCondition )
+  {
+
+    $alias = strtolower(substr($this->table, 0, 1));
+      // Requête SQL pour récupérer les transactions avec le titre de la catégorie associée
+      $sql = "SELECT $columns
+        FROM $this->table $alias
+        INNER JOIN $joinTable ON $joinCondition";
+
+      // Récupérez tous les résultats
+      return $this->sql($sql)->fetchAll();
+  }
+
 
 
   public function update(int $id): object
