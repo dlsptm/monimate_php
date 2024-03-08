@@ -14,6 +14,12 @@ class CategoryController extends Controller
    */
   public function index(string $id = null)
   {
+        // protection des routes 
+        if (!isset($_SESSION['user'])) {
+          header('Location: index?p=security/login');
+          exit;
+        }
+
     $category = new Category;
 
     // Vérifiez si un identifiant est spécifié
@@ -89,15 +95,13 @@ class CategoryController extends Controller
         // 44 = le groupe et le visiteur a le droit de lecture.
         chmod($newfilename, 0644);
 
+        
         if ($id) {
           $icon = ROOT . "/public/assets/upload/categories_icon/$cat->icon";
-
-          var_dump($cat->icon);
 
           if (file_exists($icon)) {
             unlink($icon);
           }
-
           $category->setter($id);
 
           $category->setTitle($title);
@@ -149,7 +153,11 @@ class CategoryController extends Controller
 
   public function delete(string $id)
   {
-
+    // protection des routes 
+    if (!isset($_SESSION['user'])) {
+      header('Location: index?p=security/login');
+      exit;
+    }
     $category = new Category();
     // Vérifiez si un identifiant est spécifié
     if ($id !== null) {

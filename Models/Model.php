@@ -71,19 +71,38 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
   }
 
     // Modèle Transaction
-  public function findAllWithJoin( string $columns, string $joinTable, string $joinCondition )
-  {
+    public function findAllWithJoin(string $columns, array $joins)
+    {
+        $alias = strtolower(substr($this->table, 0, 1));
+        $sql = "SELECT $columns FROM $this->table $alias";
+    
+        // Construire la clause JOIN
+        foreach ($joins as $join) {
+            $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
+        }
 
-    $alias = strtolower(substr($this->table, 0, 1));
-      // Requête SQL pour récupérer les transactions avec le titre de la catégorie associée
-      $sql = "SELECT $columns
-        FROM $this->table $alias
-        INNER JOIN $joinTable ON $joinCondition";
+        $sql .= " ORDER BY $alias.id DESC";
+    
+        // Exécuter la requête SQL et récupérer tous les résultats
+        return $this->sql($sql)->fetchAll();
+    }
+    
+    // Modèle Transaction
+    public function findOneWithJoin(string $columns, array $joins, int $id)
+    {
+        $alias = strtolower(substr($this->table, 0, 1));
+        $sql = "SELECT $columns FROM $this->table $alias";
+    
+        // Construire la clause JOIN
+        foreach ($joins as $join) {
+            $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
+        }
 
-      // Récupérez tous les résultats
-      return $this->sql($sql)->fetchAll();
-  }
-
+        $sql .= " WHERE $alias.id = $id";
+    
+        // Exécuter la requête SQL et récupérer tous les résultats
+        return $this->sql($sql)->fetch();
+    }
 
 
   public function update(int $id): object
@@ -108,6 +127,11 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
 
     // Utiliser la méthode sql() pour exécuter la requête SQL avec les conditions WHERE
     return $this->sql('UPDATE '.$this->table.' SET '. $liste_champs.' WHERE id = ?', $values);
+}
+
+public function getLastInsertId(): int
+{
+    return $this->db->lastInsertId();
 }
 
 public function delete(int $id): object
@@ -153,7 +177,7 @@ public function delete(int $id): object
   {
     foreach ($data as $key => $value) {
       // on réccup!re le nom du setter correspondant à la clé (key)
-      // titre -> getTitre
+      // titre -> setTitre
 
       $getter = 'get' . ucfirst($key);
 
@@ -166,4 +190,6 @@ public function delete(int $id): object
     }
     return $this;
   }
+
+  
 }

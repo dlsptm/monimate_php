@@ -148,21 +148,22 @@ class Form
     return $this;
   }
 
-  public function addSelect(string $name, array $options, array $attributes = []): self
+  public function addSelect(string $name, array $options, string $selectedValue, array $attributes = []): self
   {
       $this->formCode .= "<select name='$name'";
       $this->formCode .= $attributes ? $this->addAttributes($attributes) . '>' : '>';
-
-      
+  
       $value = 1; // Commencez à partir de 1
       foreach ($options as $text) {
-          $this->formCode .= "<option value='$value'>$text</option>";
+          $selected = $value == $selectedValue ? 'selected' : ''; // Vérifiez si cette option est sélectionnée
+          $this->formCode .= "<option value='$value' $selected>$text</option>";
           $value++; // Incrémentez la valeur
       }
       $this->formCode .= "</select>";
   
       return $this;
   }
+  
   
 
   public function addSubmit(string $text, array $attributes = []): self
