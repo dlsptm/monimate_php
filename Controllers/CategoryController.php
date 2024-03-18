@@ -96,17 +96,17 @@ class CategoryController extends Controller
         chmod($newfilename, 0644);
 
         
+        $category->setter($id);
+
+        $category->setTitle($title);
+        $category->setIcon($newname . '.' . $extension);
+
         if ($id) {
           $icon = ROOT . "/public/assets/upload/categories_icon/$cat->icon";
 
           if (file_exists($icon)) {
             unlink($icon);
           }
-          $category->setter($id);
-
-          $category->setTitle($title);
-          $category->setIcon($newname . '.' . $extension);
-
 
           $category->update($id);
 
@@ -118,9 +118,6 @@ class CategoryController extends Controller
           if (Category::titleExists($_POST['title'])) {
             $_SESSION['error'] = 'Une catégorie avec ce nom existe déjà';
           }
-
-          $category->setTitle($title);
-          $category->setIcon($newname . '.' . $extension);
 
           $category->insert();
           $_SESSION['success'] = 'Vous avez bien ajouté une catégorie';

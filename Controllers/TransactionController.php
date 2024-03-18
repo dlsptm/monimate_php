@@ -10,6 +10,8 @@ use App\Models\Transaction;
 class TransactionController extends Controller
 {
 
+
+  // if $id update, if not insert
   public function index(int $id = null)
   {
     // protection des routes 

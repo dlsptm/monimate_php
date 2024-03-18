@@ -77,6 +77,8 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     $sql = "SELECT $columns FROM $this->table $alias";
 
     // Construire la clause JOIN
+    // left join afin d'avoir toutes les données 
+    // inner join retourne uniquement les colones avec des jointures
     foreach ($joins as $join) {
       $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
     }

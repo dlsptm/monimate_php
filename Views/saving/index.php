@@ -11,7 +11,7 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
   </div>
 <?php endif ?>
 <div class="container">
-  <h1>Income</h1>
+  <h1>Savings</h1>
 
   <?= $form ?>
 
@@ -25,17 +25,17 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($incomes as $income) : ?>
+      <?php foreach ($savings as $saving) : ?>
         <tr>
-          <th scope="row"><?= $income->id; ?>
+          <th scope="row"><?= $saving->id; ?>
           </th>
-          <td><?= $income->title; ?>
+          <td><?= $saving->title; ?>
           </td>
-          <td><?= $income->amount; ?>€
+          <td><?= $saving->amount; ?>€
           </td>
           <td>
-            <a href=<?= "index?p=income/index/$income->id"; ?> class='btn btn-info'>Modifier</a>
-            <a href=<?= "index?p=income/delete/$income->id"; ?> class='btn btn-warning'>Supprimer</a>
+            <a href=<?= "index?p=saving/index/$saving->id"; ?> class='btn btn-info'>Modifier</a>
+            <a href=<?= "index?p=saving/delete/$saving->id"; ?> class='btn btn-warning'>Supprimer</a>
           </td>
         </tr>
       <?php endforeach ?>

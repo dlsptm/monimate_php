@@ -57,7 +57,6 @@ class SecurityController extends Controller
         // Cela en fait un choix sûr pour générer des tokens sécurisés dans divers scénarios, tels que l'authentification, la vérification de l'intégrité des données, etc.
         $token = hash('sha256', uniqid());
 
-
         $user = new User;
         $user->setUsername($username);
         $user->setEmail($email);
@@ -230,7 +229,6 @@ class SecurityController extends Controller
 
   public function reset()
   {
-
     if (isset($_POST) && !empty($_POST)) {
       if (Form::validate($_POST, ['email'])) {
         $email = htmlspecialchars(strip_tags(trim($_POST['email'])));
