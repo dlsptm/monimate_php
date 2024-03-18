@@ -48,7 +48,7 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
 
   public function insert(): object // Déclarer la méthode publique findBy() avec un paramètre de tableau $params
   {
-    $champs = []; 
+    $champs = [];
     $inter = [];
     $values = [];
 
@@ -67,56 +67,56 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     $liste_inter = implode(', ', $inter);
 
     // Utiliser la méthode sql() pour exécuter la requête SQL avec les conditions WHERE
-    return $this->sql('INSERT INTO '. $this->table . ' (' . $liste_champs .') VALUES(' . $liste_inter.')', $values);
+    return $this->sql('INSERT INTO ' . $this->table . ' (' . $liste_champs . ') VALUES(' . $liste_inter . ')', $values);
   }
 
-    // Modèle Transaction
-    public function findAllWithJoin(string $columns, array $joins)
-    {
-        $alias = strtolower(substr($this->table, 0, 1));
-        $sql = "SELECT $columns FROM $this->table $alias";
-    
-        // Construire la clause JOIN
-        foreach ($joins as $join) {
-            $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
-        }
+  // Modèle Transaction
+  public function findAllWithJoin(string $columns, array $joins)
+  {
+    $alias = strtolower(substr($this->table, 0, 1));
+    $sql = "SELECT $columns FROM $this->table $alias";
 
-        $sql .= " ORDER BY $alias.id DESC";
-    
-        // Exécuter la requête SQL et récupérer tous les résultats
-        return $this->sql($sql)->fetchAll();
+    // Construire la clause JOIN
+    foreach ($joins as $join) {
+      $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
     }
-    
-    // Modèle Transaction
-    public function findOneWithJoin(string $columns, array $joins, int $id)
-    {
-        $alias = strtolower(substr($this->table, 0, 1));
-        $sql = "SELECT $columns FROM $this->table $alias";
-    
-        // Construire la clause JOIN
-        foreach ($joins as $join) {
-            $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
-        }
 
-        $sql .= " WHERE $alias.id = $id";
-    
-        // Exécuter la requête SQL et récupérer tous les résultats
-        return $this->sql($sql)->fetch();
+    $sql .= " ORDER BY $alias.id DESC";
+
+    // Exécuter la requête SQL et récupérer tous les résultats
+    return $this->sql($sql)->fetchAll();
+  }
+
+  // Modèle Transaction
+  public function findOneWithJoin(string $columns, array $joins, int $id)
+  {
+    $alias = strtolower(substr($this->table, 0, 1));
+    $sql = "SELECT $columns FROM $this->table $alias";
+
+    // Construire la clause JOIN
+    foreach ($joins as $join) {
+      $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
     }
+
+    $sql .= " WHERE $alias.id = $id";
+
+    // Exécuter la requête SQL et récupérer tous les résultats
+    return $this->sql($sql)->fetch();
+  }
 
 
   public function update(int $id): object
-{
-    $champs = []; 
+  {
+    $champs = [];
     $values = [];
 
     foreach ($this as $champ => $value) {
-        // Update 
+      // Update 
 
-        if ($value !== null && $champ !== 'db' && $champ !== 'table') {
-            $champs[] = "$champ = ?";
-            $values[] = $value; // Ajouter la valeur à la liste des valeurs
-        }
+      if ($value !== null && $champ !== 'db' && $champ !== 'table') {
+        $champs[] = "$champ = ?";
+        $values[] = $value; // Ajouter la valeur à la liste des valeurs
+      }
     }
 
     // Ajouter l'ID à la liste des valeurs (pour la clause WHERE)
@@ -126,18 +126,18 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     $liste_champs = implode(', ', $champs);
 
     // Utiliser la méthode sql() pour exécuter la requête SQL avec les conditions WHERE
-    return $this->sql('UPDATE '.$this->table.' SET '. $liste_champs.' WHERE id = ?', $values);
-}
+    return $this->sql('UPDATE ' . $this->table . ' SET ' . $liste_champs . ' WHERE id = ?', $values);
+  }
 
-public function getLastInsertId(): int
-{
+  public function getLastInsertId(): int
+  {
     return $this->db->lastInsertId();
-}
+  }
 
-public function delete(int $id): object
-{
-  return $this->sql("DELETE FROM {$this->table} WHERE id = ?", [$id]);
-}
+  public function delete(int $id): object
+  {
+    return $this->sql("DELETE FROM {$this->table} WHERE id = ?", [$id]);
+  }
 
 
   // Méthode protégée pour exécuter des requêtes SQL
@@ -190,6 +190,4 @@ public function delete(int $id): object
     }
     return $this;
   }
-
-  
 }

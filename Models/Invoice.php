@@ -15,6 +15,28 @@
       $this->title = "Facture ".$this->title;
     }
 
+
+    public function findOnebyTransactionId(string $id)
+    {   
+
+        return $this->sql("SELECT * FROM $this->table WHERE transaction_id = ?", [$id])->fetch();
+    }
+
+        public static function invoiceExists(string $id)
+    {
+        // Vérifie si l'email existe déjà dans la base de données
+        $invoiceMiodel = new Invoice(); // Supposons que votre modèle d'utilisateur s'appelle User
+        $invoice = $invoiceMiodel->findOnebyTransactionId($id);
+
+        if($invoice) {
+            return true; // L'email existe déjà dans la base de données
+        } 
+    
+        return false; // L'email n'existe pas dans la base de données
+    
+    }
+
+
     /**
      * Get the value of id
      */

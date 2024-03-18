@@ -20,25 +20,12 @@ class TransactionController extends Controller
 
     $transaction = new Transaction();
     $invoice = new Invoice;
-
-
-    // Vérifiez si un identifiant est spécifié
-    if ($id !== null) {
-      // Récupérez les détails de la catégorie à l'index spécifié
-      $transac = $transaction->find($id);
-
-      if ($transac->invoice_id !== null) {
-        $inv = $invoice->find($transac->invoice_id);
-      }
-      // Vérifiez si la catégorie existe
-      if (!$transac) {
-        $_SESSION["error"] = 'Transaction non trouvée';
-        header('Location: index?p=transaction/read');
-        exit;
-      }
-    }
-
     $currentDate = date('Y-m-d');
+
+    if ($id) {
+      $transac = $transaction->find($id);
+      $inv = $invoice->findOnebyTransactionId($id);
+    }
 
     if (isset($_POST) && !empty($_POST)) {
       // vérification si tous les champs sont bien remplis 
@@ -75,21 +62,14 @@ class TransactionController extends Controller
         $transaction->setPaymentOption($_POST['payment_option']);
         $transaction->setUserId($_SESSION['user']['id']);
 
-
-
         if (isset($_POST['is_monthly']) && !empty($_POST['is_monthly'])) {
           $transaction->setIsMonthly(1);
         }
 
-        if ($id) {
-
+        if ($id)  {
           $transaction->update($id);
-          header('Location: index?p=transaction/read');
-          exit;
         } else {
           $transaction->insert($transaction);
-          header('Location: index?p=transaction/read');
-          exit;
         }
 
         // ici on vérifie que l'utilisateur a une facture
@@ -103,8 +83,6 @@ class TransactionController extends Controller
           // le titre de la facture ayant déjà une valeur par défaut il n'est pas nécessaire que l'utilisateur le remplisse
           // on protège la requette sql
           $invoice_title = htmlspecialchars(strip_tags(trim($_POST['invoice_title'])));
-
-
 
           // on vérifie le type mime du fichier
           $allowed = [
@@ -157,19 +135,20 @@ class TransactionController extends Controller
           $invoice->setHref($newname . '.' . $extension);
 
 
-          // on le met dans la colone transaction_id
-          $invoice->setTransactionId($transactionId);
-
-           if ($id) {
-            $oldFiled = ROOT . "/public/assets/upload/categories_icon/$inv->href";
-
-            if (file_exists($oldFiled)) {
-              unlink($oldFiled);
+          
+          if ($id) {
+            $oldFile =  ROOT . "/public/assets/upload/invoices/$inv->href";
+            
+            if (file_exists($oldFile)) {
+              unlink($oldFile);
             }
-            $invoice->update($transac->invoice_id);
-           } else {
-            $invoice->insert($invoice); 
-          }
+            
+            $invoice->update($id);
+          }else {
+            // on le met dans la colone transaction_id
+            $invoice->setTransactionId($transactionId);
+          $invoice->insert($invoice); 
+        }
 
           // on réccupère le dernier ID du invoice afin de le transmettre à transaction
           $invoiceId = $invoice->getLastInsertId();
@@ -179,9 +158,10 @@ class TransactionController extends Controller
           // on update transaction
           $transaction->update($transactionId);
         }
+
+        header('Location: index?p=transaction/read');
       }
     }
-
 
 
     // Commencer le formulaire
@@ -208,7 +188,7 @@ class TransactionController extends Controller
         'checked' => true
       ] : [])
 
-      ->addLabel('Télécharger une facture', 'hasInvoice',)
+      ->addLabel( $id ? 'Modifier la facture' : 'Télécharger une facture', 'hasInvoice',)
       ->addInput('checkbox', 'hasInvoice', isset($transac) && $transac->invoice_id !== null ? [
         'id' => 'hasInvoice',
         'checked' => true
@@ -217,7 +197,7 @@ class TransactionController extends Controller
 
       ])
       ->addLabel('Titre de la facture', 'invoice_title', ['class' => 'invoices-info'])
-      ->addInput('text', 'invoice_title', ['class' => 'invoices-info', 'value' => isset($inv) ? $inv->title ?? '' : ''])
+      ->addInput('text', 'invoice_title', ['class' => 'invoices-info', 'value' => isset($inv) ? $inv->title  : ''])
       ->addLabel('Fichier', 'invoice_href', ['class' => 'invoices-info'])
       ->addInput('file', 'invoice_href', ['class' => 'invoices-info'])
 

@@ -109,7 +109,6 @@ class CategoryController extends Controller
 
 
           $category->update($id);
-          var_dump($cat->icon);
 
           $_SESSION['success'] = 'Vous avez bien modifié une catégorie';
           header('Location: index?p=category/index');

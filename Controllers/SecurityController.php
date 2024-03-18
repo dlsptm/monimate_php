@@ -324,7 +324,6 @@ class SecurityController extends Controller
       }
     }
 
-
     $form = new Form();
 
     // Commencer le formulaire
