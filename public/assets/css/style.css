@@ -1,0 +1,158 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+:root {
+  --black : #0B0B0B;
+  --white: #F8F8F8;
+  --darkbg: #090E26;
+  --lighterbg: #181D39; 
+  --darkerbg: #f4f4f4; 
+  --gradient-orange: linear-gradient(40deg, #DE7332 0%, #D54A5A 100%);
+  --gradient-green: linear-gradient(40deg, #1FDCE8 0%, #23C36F 100%);
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url(../font/Montserrat/static/Montserrat-Medium.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  /* src: url(./public/assets/font/Rubik/static/Rubik-Medium.ttf) ; */
+  src: url(../Rubik/static/Rubik-Medium.ttf)
+  format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat-Alternates';
+  src: url(../font/Montserrat_Alternates/MontserratAlternates-Regular.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+body {
+  background: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  max-width: 100%;
+}
+
+.darkerbg {
+  background: var(--darkerbg);
+}
+
+.underline-none {
+  text-decoration: none;
+}
+
+.border-radius-50 {
+  border-radius: 50px;
+}
+
+.border-radius-20 {
+  border-radius: 20px;
+}
+
+.border-radius-10 {
+  border-radius: 10px;
+}
+
+.colorBlack {
+  color: var(--black)
+}
+.colorWhite {
+  color: var(--white)
+}
+
+.orangeRadiant {
+  background: var(--gradient-orange);
+}
+
+.greenRadient {
+  background: var(--gradient-green);
+}
+
+.colorOrange {
+  color: #F19F6D;
+}
+
+.colorGreen {
+  color: #9BEDEA;
+}
+
+.img-round {
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
+
+#message {
+  resize: none;
+}
+
+.form-submit-btn {
+  background: var(--gradient-orange);
+  transition: all 0.2s !important;
+}
+
+.form-submit-btn:hover {
+  background: var(--gradient-green);
+}
+
+
+.maison {
+  background: #CF3888;
+}
+
+.personnel {
+  background: #FFC759;
+
+}
+
+.medical {
+  background: #5FD597;
+
+}
+
+.transportation {
+  background: #5430B1;
+
+}
+
+.economie {
+  background: #DE7332;
+}
+
+.opacity-20 {
+  opacity: 20%;
+}
+
+
+@media only screen and (max-width: 991px) {
+  .img-round {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+  .signup {
+    background: none;
+  }
+
+}
+
+@media only screen and (max-width: 600px) {
+  .img-round {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+
+
+}
+

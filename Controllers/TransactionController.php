@@ -172,43 +172,49 @@ class TransactionController extends Controller
     $categories = $category->findAllbyTitle();
 
     $form
-      ->startForm('post', '', ['class' => 'form', "enctype" => "multipart/form-data"])
-      ->addLabel('Titre de la transaction', 'title')
-      ->addInput('text', 'title', ['required' => true, "value" => $transac->title ?? ''])
-      ->addLabel('Montant', 'amount')
-      ->addInput('text', 'amount', ['required' => true, "value" => $transac->amount ?? ''])
-      ->addLabel('Lieu de l\'achat', 'location')
-      ->addInput('text', 'location', ['required' => true, "value" => $transac->location ?? ''])
-      ->addLabel('Catégorie', 'category')
-      ->addSelect('category', $categories, $transac->category_id ?? '')
-      ->addLabel('Facilité de paiement', 'payment_option')
-      ->addInput('number', 'payment_option', ['required' => true, 'min' => 1, 'value' => $transac->payment_option ?? 1])
-      ->addLabel('Date', 'created_at')
-      ->addInput('date', 'created_at', ['required' => true, 'min' => 1, 'value' => $transac->created_at ?? $currentDate])
-      ->addLabel('Transaction Courante', 'is_monthly')
-      ->addInput('checkbox', 'is_monthly', isset($transac) && $transac->is_monthly !== 0 ? [
-        'checked' => true
-      ] : [])
+      ->startForm('post', '', ['class' => '', "enctype" => "multipart/form-data"])
+      ->addLabel('Titre de la transaction', 'title', ['class' => 'form-label'], 'my-3')
+      ->addInput('text', 'title', ['required' => true, "value" => $transac->title ?? '', 'class' => 'form-control'])
+      ->addLabel('Montant', 'amount', ['class' => 'form-label'], 'my-3')
+      ->addInput('text', 'amount', ['required' => true, "value" => $transac->amount ?? '', 'class' => 'form-control'])
+      ->addLabel('Lieu de l\'achat', 'location', ['class' => 'form-label'], 'my-3')
+      ->addInput('text', 'location', ['required' => true, "value" => $transac->location ?? '', 'class' => 'form-control'])
+      ->addLabel('Catégorie', 'category', ['class' => 'form-label'], 'my-3')
+      ->addSelect('category', $categories, $transac->category_id ?? '', ['class' => 'form-control'])
+      ->addLabel('Facilité de paiement', 'payment_option', ['class' => 'form-label'], 'my-3')
+      ->addInput('number', 'payment_option', ['required' => true, 'min' => 1, 'value' => $transac->payment_option ?? 1, 'class' => 'form-control'])
+      ->addLabel('Date', 'created_at', ['class' => 'form-label'], 'my-3')
+      ->addInput('date', 'created_at', ['required' => true, 'min' => 1, 'value' => $transac->created_at ?? $currentDate, 'class' => 'form-control'])
 
-      ->addLabel( $id ? 'Modifier la facture' : 'Télécharger une facture', 'hasInvoice',)
+      ->addLabel('Transaction Courante', 'is_monthly', ['class' => 'form-check-label'], 'form-check')
+      ->addInput('checkbox', 'is_monthly', isset($transac) && $transac->is_monthly !== 0 ? [
+        'checked' => true,
+        'class' => 'form-check-input'
+      ] : [
+        'class' => 'form-check-input'
+      ])
+      ->addLabel( $id ? 'Modifier la facture' : 'Télécharger une facture', 'hasInvoice', ['class' => 'form-check-label'], 'form-check my-3')
       ->addInput('checkbox', 'hasInvoice', isset($transac) && $transac->invoice_id !== null ? [
         'id' => 'hasInvoice',
-        'checked' => true
+        'checked' => true,
+        'class' => 'form-check-input'
       ] : [
         'id' => 'hasInvoice',
-
+        'class' => 'form-check-input'
       ])
-      ->addLabel('Titre de la facture', 'invoice_title', ['class' => 'invoices-info'])
-      ->addInput('text', 'invoice_title', ['class' => 'invoices-info', 'value' => isset($inv) ? $inv->title  : ''])
-      ->addLabel('Fichier', 'invoice_href', ['class' => 'invoices-info'])
-      ->addInput('file', 'invoice_href', ['class' => 'invoices-info'])
+      ->addLabel('Titre de la facture', 'invoice_title', ['class' => 'col invoices-info form-label'], 'my-3')
+      ->addInput('text', 'invoice_title', ['class' => 'invoices-info form-control', 'value' => isset($inv) && !empty($inv->title) ? $inv->title  : ''])
+      ->addLabel('Fichier', 'invoice_href', ['class' => 'invoices-info'], 'my-3')
+      ->addInput('file', 'invoice_href', ['class' => 'invoices-info form-control'])
 
-      ->addSubmit('Valider')
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn my-3 text-white'])
       ->endForm();
 
 
     // Afficher le formulaire
     $this->render('transaction/index', [
+      'title' => $id ? 'Modifier une transaction' : 'Ajouter une transaction',
+      'description' => 'ceci est la description',
       'form' => $form->create(),
     ]);
   }
@@ -216,6 +222,12 @@ class TransactionController extends Controller
 
   public function read()
   {
+        // protection des routes 
+        if (!isset($_SESSION['user'])) {
+          header('Location: index?p=security/login');
+          exit;
+        }
+        
     $transaction = new Transaction();
     // on prépare la jointure
     $columns = 't.*, c.title AS category_title, i.href as invoice_href';
@@ -226,6 +238,8 @@ class TransactionController extends Controller
 
     // Afficher le formulaire
     return $this->render('transaction/read', [
+      'title' => 'Les Transactions',
+      'description' => 'ceci est la description',
       'transactions' => $transaction->findAllWithJoin($columns, $joins)
     ]);
   }

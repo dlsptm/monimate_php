@@ -66,16 +66,18 @@ class SavingController extends Controller
     // Commencer le formulaire
     $form
       ->startForm('post', '#', ['class' => 'form'])
-      ->addLabel('Source', 'title')
-      ->addInput('text', 'title', ['required' => true, 'value' => $sav->title ?? ''])
-      ->addLabel('Montant', 'amount')
-      ->addInput('text', 'amount', ['required' => true, 'value' => $sav->amount ?? ''])
-      ->addSubmit('Valider')
+      ->addLabel('Source', 'title', ['class' => 'form-label'], 'my-3')
+      ->addInput('text', 'title', ['required' => true, 'value' => $sav->title ?? '', 'class' => 'form-control'])
+      ->addLabel('Montant', 'amount', ['class' => 'form-label'], 'my-3')
+      ->addInput('text', 'amount', ['required' => true, 'value' => $sav->amount ?? '', 'class' => 'form-control'])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn my-3 text-white'])
       ->endForm();
 
 
     // Afficher le formulaire
     $this->render('saving/index', [
+      'title' => $id ? 'Modifier une économie' : 'Ajouter une une économie',
+      'description' => 'ceci est la description',
       'form' => $form->create(),
       'savings' => $saving->findAll()
     ]);
@@ -89,6 +91,7 @@ class SavingController extends Controller
       header('Location: index?p=security/login');
       exit;
     }
+    
     $saving = new saving();
     // Vérifiez si un identifiant est spécifié
     if ($id !== null) {

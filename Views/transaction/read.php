@@ -9,10 +9,15 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
     <?php echo $_SESSION["success"];
     unset($_SESSION['success']); ?>
   </div>
-<?php endif ?>
+  <?php endif;
+
+require_once ROOT.'/Views/inc/header.php';
+?>
 
 
 <?php if (!isset($transac)) : ?></p>
+
+  <div class="container">
   <h1>Transactions</h1>
 
 
@@ -45,8 +50,8 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
           <td><?= $transaction->is_monthly == 0 ? 'Oui' : 'Non'; ?></td>
           <td><?= $transaction->invoice_href !== null ? '<a href="./assets/upload/invoices/' . $transaction->invoice_href . '" target="_blank">Facture</a>' : '<a href="index?p=transaction/invoice/' . $transaction->id . '" target="_blank">Ajouter une facture</a>' ?></td>
           <td>
-            <a href=<?= "index?p=transaction/index/$transaction->id"; ?> class='btn btn-info'>Modifier</a>
-            <a href=<?= "index?p=transaction/delete/$transaction->id"; ?> class='btn btn-warning' onclick='confirm("Êtes vous sur de vouloir le supprimer ?")'>Supprimer</a>
+            <a href=<?= "index?p=transaction/index/$transaction->id"; ?> class='btn greenRadient'>Modifier</a>
+            <a href=<?= "index?p=transaction/delete/$transaction->id"; ?> class='btn btn-light' onclick='confirm("Êtes vous sur de vouloir le supprimer ?")'>Supprimer</a>
           </td>
         </tr>
       <?php endforeach ?>
@@ -70,3 +75,4 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
   </p>
 
 <?php endif ?>
+</div>

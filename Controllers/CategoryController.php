@@ -132,16 +132,18 @@ class CategoryController extends Controller
     // Commencer le formulaire
     $form
       ->startForm('post', '#', ['class' => 'form', "enctype" => "multipart/form-data"])
-      ->addLabel('Titre de la category', 'title')
-      ->addInput('text', 'title', ['required' => true, 'value' => $cat->title ?? ''])
-      ->addLabel('Icon', 'icon')
-      ->addInput('file', 'icon', ['required' => true, 'value' => $cat->icon ?? ''])
-      ->addSubmit('Valider')
+      ->addLabel('Titre de la category', 'title', ['class' => 'col invoices-info form-label'], 'my-3')
+      ->addInput('text', 'title', ['required' => true, 'value' => $cat->title ?? '', 'class' => 'form-control'])
+      ->addLabel('Icon', 'icon', ['class' => 'col invoices-info form-label'], 'my-3')
+      ->addInput('file', 'icon', ['required' => true, 'value' => $cat->icon ?? '', 'class' => 'form-control'])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn my-3 text-white'])
       ->endForm();
 
 
     // Afficher le formulaire
     $this->render('category/index', [
+      'title' => $id ? 'Modifier une catégorie' : 'Ajouter une catégorie',
+      'description' => 'ceci est la description',
       'form' => $form->create(),
       'categories' => $category->findAll()
     ]);
@@ -173,7 +175,6 @@ class CategoryController extends Controller
         unlink($icon);
       }
 
-      $category->setter($id);
       $category->delete($id);
 
       $_SESSION['success'] = 'Vous avez bien modifié une catégorie';

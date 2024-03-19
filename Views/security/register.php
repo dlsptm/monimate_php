@@ -7,8 +7,15 @@
       <div class="alert alert-success" role='alert'>
     <?php echo $_SESSION["success"] ; unset($_SESSION['success']);?>
   </div>
-<?php endif?>
+  <?php endif;
 
+require_once ROOT.'/Views/inc/header.php';
+?>
+
+<div class="container">
 <h1>S'inscrire</h1>
 <?= $form ; ?>
-  <a href="index?p=security/login">Déjà un compte ?</a>
+<div>
+  <a href="index?p=security/login" class="btn">Déjà un compte ?</a>
+  </div>
+  </div>

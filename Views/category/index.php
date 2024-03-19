@@ -9,7 +9,11 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
     <?php echo $_SESSION["success"];
     unset($_SESSION['success']); ?>
   </div>
-<?php endif ?>
+  <?php endif;
+
+require_once ROOT.'/Views/inc/header.php';
+?>
+
 <div class="container">
   <h1>Catégories</h1>
 
@@ -34,8 +38,8 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
           <td><?= $category->title; ?>
           </td>
           <td>
-            <a href=<?= "index?p=category/index/$category->id"; ?> class='btn btn-info'>Modifier</a>
-            <a href=<?= "index?p=category/delete/$category->id"; ?> class='btn btn-warning'>Supprimer</a>
+            <a href=<?= "index?p=category/index/$category->id"; ?> class='btn greenRadient'>Modifier</a>
+            <a href=<?= "index?p=category/delete/$category->id"; ?> class='btn btn-light' onclick='confirm("Êtes vous sur de vouloir le supprimer ?")'>Supprimer</a>
           </td>
         </tr>
       <?php endforeach ?>

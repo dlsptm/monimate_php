@@ -86,18 +86,18 @@ class SecurityController extends Controller
 
     // Commencer le formulaire
     $form
-      ->startForm('post', '', ['class' => 'form'])
-      ->addLabel('Pseudo', 'username')
-      ->addInput('text', 'username', ['required' => true])
-      ->addLabel('Adresse Email', 'email')
-      ->addInput('email', 'email', ['required' => true])
-      ->addLabel('Mot de passe', 'password')
-      ->addInput('password', 'password', ['required' => true])
-      ->addLabel('Confirmer votre mot de passe', 'confirm')
-      ->addInput('password', 'confirm', ['required' => true])
-      ->addInput('checkbox', 'RGPDConsent', ['required' => true])
-      ->addLabel('Accepter les conditions d\'utilisation', 'RGPDConsent')
-      ->addSubmit('Valider')
+      ->startForm('post', '')
+      ->addLabel('Pseudo', 'username', ['class' => 'form-label'], 'my-3')
+      ->addInput('text', 'username', ['required' => true, 'class' => 'form-control'])
+      ->addLabel('Adresse Email', 'email', ['class' => 'form-label'], 'my-3')
+      ->addInput('email', 'email', ['required' => true, 'class' => 'form-control'])
+      ->addLabel('Mot de passe', 'password', ['class' => 'form-label'], 'my-3')
+      ->addInput('password', 'password', ['required' => true, 'class' => 'form-control'])
+      ->addLabel('Confirmer votre mot de passe', 'confirm', ['class' => 'form-label'], 'my-3')
+      ->addInput('password', 'confirm', ['required' => true, 'class' => 'form-control'])
+      ->addLabel('Accepter les conditions d\'utilisation', 'RGPDConsent', ['class' => 'form-check-label'], 'form-check my-3')
+      ->addInput('checkbox', 'RGPDConsent', ['required' => true, 'class' => 'form-check-input'])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn mb-3 text-white'])
       ->endForm();
 
     if (isset($_SESSION['user'])) {
@@ -106,6 +106,8 @@ class SecurityController extends Controller
 
     // Afficher le formulaire
     $this->render('security/register', [
+      'title' => 'Bienvenue dans Monimate : Inscription',
+      'description' => 'ceci est la description',
       'form' => $form->create()
     ]);
   }
@@ -156,11 +158,11 @@ class SecurityController extends Controller
     // Commencer le formulaire
     $form
       ->startForm('post', '', ['class' => 'form'])
-      ->addLabel('Adresse Email', 'email')
-      ->addInput('email', 'email', ['required' => true])
-      ->addLabel('Mot de passe', 'password')
-      ->addInput('password', 'password', ['required' => true])
-      ->addSubmit('Valider')
+      ->addLabel('Adresse Email', 'email', ['class' => 'form-label'], 'my-3')
+      ->addInput('email', 'email', ['required' => true, 'class' => 'form-control'])
+      ->addLabel('Mot de passe', 'password', ['class' => 'form-label'], 'my-3')
+      ->addInput('password', 'password', ['required' => true, 'class' => 'form-control'])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn mb-3 text-white'])
       ->endForm();
 
     if (isset($_SESSION['user'])) {
@@ -168,6 +170,8 @@ class SecurityController extends Controller
     }
     // Afficher le formulaire
     return $this->render('security/login', [
+      'title' => 'Bienvenue dans Monimate : Connexion',
+      'description' => 'ceci est la description',
       'form' => $form->create()
     ]);
   }
@@ -270,11 +274,13 @@ class SecurityController extends Controller
     // Commencer le formulaire
     $form
       ->startForm('post', '', ['class' => 'form'])
-      ->addLabel('Adresse Email', 'email')
-      ->addInput('email', 'email', ['required' => true])
-      ->addSubmit('Valider')
+      ->addLabel('Adresse Email', 'email', ['class' => 'form-label'], 'my-3')
+      ->addInput('email', 'email', ['required' => true, 'class' => 'form-control'])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn mb-3 text-white'])
       ->endForm();
       $this->render('security/reset', [
+        'title' => 'Modifier le mot de passe',
+        'description' => 'ceci est la description',
         'form' => $form->create()
       ]);  
   }
@@ -327,11 +333,11 @@ class SecurityController extends Controller
     // Commencer le formulaire
     $form
       ->startForm('post', '', ['class' => 'form'])
-      ->addLabel('Mot de passe', 'password')
-      ->addInput('password', 'password', ['required' => true])
-      ->addLabel('Confirmer le mot de passe', 'confirm')
-      ->addInput('password', 'confirm', ['required' => true])
-      ->addSubmit('Valider')
+      ->addLabel('Mot de passe', 'password', ['class' => 'form-label'], 'my-3')
+      ->addInput('password', 'password', ['required' => true, 'class' => 'form-control'])
+      ->addLabel('Confirmer votre mot de passe', 'confirm', ['class' => 'form-label'], 'my-3')
+      ->addInput('password', 'confirm', ['required' => true, 'class' => 'form-control'])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn mb-3 text-white'])
       ->endForm();
 
     if (isset($_SESSION['user'])) {
@@ -339,6 +345,8 @@ class SecurityController extends Controller
     }
     // Afficher le formulaire
     return $this->render('security/new_password', [
+      'title' => 'Modifier le mot de passe',
+      'description' => 'ceci est la description',
       'form' => $form->create()
     ]);
 

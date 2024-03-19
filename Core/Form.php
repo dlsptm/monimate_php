@@ -109,11 +109,11 @@ class Form
    * @param array $attributes
    * @return self
    */
-  public function addLabel(string $text, string $for, array $attributes = []): self
+  public function addLabel(string $text, string $for, array $attributes = [], string $class=null): self
   {
 
     // on ouvre la balise 
-    $this->formCode .= "<label for='$for'";
+    $this->formCode .= "<div class='$class'><label for='$for'";
 
     //on ajoute les attributs
     $this->formCode .= $attributes ? $this->addAttributes($attributes) : '';
@@ -126,11 +126,11 @@ class Form
 
   public function addInput(string $type, string $name, array $attributes = []): self
   {
-    // on ouvre la balise
-    $this->formCode .= "<input type='$type' name='$name'";
+    // on ouvre la balis
+     $this->formCode .= "<input type='$type' name='$name'"; 
 
     // on ajoute les attributs
-    $this->formCode .= $attributes ? $this->addAttributes($attributes) . '>' : '>';
+    $this->formCode .= $attributes ? $this->addAttributes($attributes) . '></div>' : '></div>';
 
     return $this;
   }
@@ -144,7 +144,7 @@ class Form
     $this->formCode .= $attributes ? $this->addAttributes($attributes) : '';
 
     // on ajoute le texte
-    $this->formCode .= ">$text</textarea>";
+    $this->formCode .= ">$text</textarea></div>";
     return $this;
   }
 

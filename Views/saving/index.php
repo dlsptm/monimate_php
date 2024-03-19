@@ -9,7 +9,11 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
     <?php echo $_SESSION["success"];
     unset($_SESSION['success']); ?>
   </div>
-<?php endif ?>
+  <?php endif;
+
+require_once ROOT.'/Views/inc/header.php';
+?>
+
 <div class="container">
   <h1>Savings</h1>
 

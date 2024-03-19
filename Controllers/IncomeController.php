@@ -67,16 +67,18 @@ class IncomeController extends Controller
     // Commencer le formulaire
     $form
       ->startForm('post', '#', ['class' => 'form'])
-      ->addLabel('Source', 'title')
-      ->addInput('text', 'title', ['required' => true, 'value' => $inc->title ?? ''])
-      ->addLabel('Montant', 'amount')
-      ->addInput('text', 'amount', ['required' => true, 'value' => $inc->amount ?? ''])
-      ->addSubmit('Valider')
+      ->addLabel('Source', 'title', ['class' => 'form-label'], 'my-3')
+      ->addInput('text', 'title', ['required' => true, 'value' => $inc->title ?? '', 'class' => 'form-control'])
+      ->addLabel('Montant', 'amount', ['class' => 'form-label'], 'my-3')
+      ->addInput('text', 'amount', ['required' => true, 'value' => $inc->amount ?? '', 'class' => 'form-control'])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn my-3 text-white'])
       ->endForm();
 
 
     // Afficher le formulaire
-    $this->render('invoice/index', [
+    $this->render('income/index', [
+      'title' => $id ? 'Modifier une source d\'entrée' : 'Ajouter une une source d\'entrée',
+      'description' => 'ceci est la description',
       'form' => $form->create(),
       'incomes' => $income->findAll()
     ]);
