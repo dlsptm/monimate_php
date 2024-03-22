@@ -9,6 +9,7 @@
     protected $email;
     protected $password;
     protected $roles;
+    protected $profile;
     protected $active;
     protected $token;
     protected $created_at;
@@ -19,6 +20,7 @@
       $this->roles = json_encode(['ROLE_USER']);
       $this->active = 0;
       $this->created_at = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('Y-m-d H:i:s'); // Date actuelle au format MySQL datetime avec l'heure de Paris
+      $this->profile = 'default-profile.png';
       }
 
     /**
@@ -81,7 +83,8 @@
         $_SESSION['user'] = [
             'id' => $this->id,
             'username' => $this->username,
-            'email' => $this->email
+            'email' => $this->email,
+            'profile'=>$this->profile
         ];
     }
 

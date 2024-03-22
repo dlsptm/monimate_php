@@ -2,8 +2,7 @@
 
 namespace App\Core;
 
-use App\Controllers\CategoryController;
-
+use App\Controllers\HomeController;
 
 /**
  * Routeur principal
@@ -65,10 +64,18 @@ class Router
         }
       }
     } else {
-      $controller = new CategoryController;
+
+      // s'il n'y a pas de $_GET['p'], alors on instancie le Home controller
+      $controller = new HomeController;
+
+       
+      if(!isset($_SESSION['user'])) {
+        // on appel la méthode index, si l'utilisateur n'est pas connecté
+        $controller->index();
+      } else {
+        // si connecté, on appelle la méthode home
+        $controller->home();
+      }
     }
   }
 }
-
-
-

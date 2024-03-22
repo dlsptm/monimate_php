@@ -3,10 +3,9 @@
 namespace App\Controllers;
 
 use App\Core\Form;
-use App\Models\Category;
-use App\Models\Income;
+use App\Models\Goal;
 
-class IncomeController extends Controller
+class GoalController extends Controller
 {
 
   public function index(string $id = null)
@@ -16,16 +15,16 @@ class IncomeController extends Controller
       exit;
     }
 
-    $income = new Income();
+    $goal = new Goal();
     
     if ($id) {
-      $inc = $income->find($id);
+      $gol = $goal->find($id);
     }
 
 
     if (isset($_POST) && !empty($_POST)) {
       // vérification si tous les champs sont bien remplis 
-      if (!Form::validate($_POST, ['title', 'amount'])) {
+      if (!Form::validate($_POST, ['title', 'amount', 'deadline'])) {
         $_SESSION['error'] = 'Veuillez remplir tous les champs du formulaire.';
       }
 
@@ -49,12 +48,12 @@ class IncomeController extends Controller
           'userId' => $_SESSION['user']['id']
         ];
 
-        $income->setter($data);
+        $goal->setter($data);
   
         if (isset($id)) {  
-          $income->update($id);
+          $goal->update($id);
         } else {
-          $income->insert($income);
+          $goal->insert($goal);
         }
       }
 
@@ -68,19 +67,21 @@ class IncomeController extends Controller
     $form
       ->startForm('post', '#', ['class' => 'form'])
       ->addLabel('Source', 'title', ['class' => 'form-label'], 'my-3')
-      ->addInput('text', 'title', ['required' => true, 'value' => $inc->title ?? '', 'class' => 'form-control'])
+      ->addInput('text', 'title', ['required' => true, 'value' => $gol->title ?? '', 'class' => 'form-control'])
       ->addLabel('Montant', 'amount', ['class' => 'form-label'], 'my-3')
-      ->addInput('text', 'amount', ['required' => true, 'value' => $inc->amount ?? '', 'class' => 'form-control'])
+      ->addInput('text', 'amount', ['required' => true, 'value' => $gol->amount ?? '', 'class' => 'form-control'])
+      ->addLabel('Deadline', 'deadline', ['class' => 'form-label'], 'my-3')
+      ->addInput('date', 'deadline', ['required' => true, 'value' => $gol->deadline ?? '', 'class' => 'form-control'])
       ->addSubmit('Valider', ['class' => 'btn form-submit-btn my-3 text-white'])
       ->endForm();
 
 
     // Afficher le formulaire
-    $this->render('income/index', [
-      'title' => $id ? 'Modifier une source d\'entrée' : 'Ajouter une une source d\'entrée',
+    $this->render('goal/index', [
+      'title' => $id ? 'Modifier une économie' : 'Ajouter une une économie',
       'description' => 'ceci est la description',
       'form' => $form->create(),
-      'incomes' => $income->findAll()
+      'goals' => $goal->findAll()
     ]);
   }
 
@@ -92,37 +93,29 @@ class IncomeController extends Controller
       header('Location: index?p=security/login');
       exit;
     }
-    $income = new Income();
+    
+    $goal = new Goal();
     // Vérifiez si un identifiant est spécifié
     if ($id !== null) {
       // Récupérez les détails de la catégorie à l'index spécifié
-      $inc = $income->find($id);
+      $gol = $goal->find($id);
 
       // Vérifiez si la catégorie existe
-      if (!$inc) {
+      if (!$gol) {
         $_SESSION["error"] = 'Erreur, non trouvée';
-        header('Location: index?p=category/index');
+        header('Location: index?p=goal/index');
         exit;
       }
 
-      $income->delete($id);
+      $goal->delete($id);
 
-      $_SESSION['success'] = 'Vous avez bien suprimer l\'income';
-      header('Location: index?p=income/index');
+      $_SESSION['success'] = 'Vous avez bien suprimer l\'goal';
+      header('Location: index?p=goal/index');
       exit;
     }
   }
 
-  public function getIncomes ()
-  {
-
-      $id = $_SESSION['user']['id'];
-      $income = new Income;
-      $getIncome = $income->findAllById($id);
-
-      header('Content-Type: application/json');
-      echo json_encode($getIncome) ;
+  
 
 
-  }
 }

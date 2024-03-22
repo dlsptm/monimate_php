@@ -21,30 +21,11 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     return $this->sql('SELECT * FROM ' . $this->table)->fetchAll();
   }
 
-  // Méthode pour trouver des enregistrements dans la table basés sur des paramètres spécifiés
-  public function findBy(array $params): string // Déclarer la méthode publique findBy() avec un paramètre de tableau $params
-  {
-    $champs = []; // Initialiser un tableau pour stocker les conditions de la requête WHERE
-    $values = []; // Initialiser un tableau pour stocker les valeurs liées
-
-    // Parcourir le tableau des paramètres
-    foreach ($params as $champ => $value) {
-      // Construire les conditions de la requête WHERE
-      $champs[] = "$champ = ?"; // Ajouter le champ et le symbole d'égalité à la liste des champs
-      $values[] = $value; // Ajouter la valeur à la liste des valeurs
-    }
-
-    // Transformer le tableau des champs en une chaîne de caractères séparée par 'AND'
-    $liste_champs = implode(' AND ', $champs);
-
-    // Utiliser la méthode sql() pour exécuter la requête SQL avec les conditions WHERE
-    return $this->sql('SELECT * FROM ' . $this->table . ' WHERE ' . $liste_champs, $values)->fetchAll();
-  }
-
   public function find(int $id)
   {
     return $this->sql("SELECT * FROM {$this->table} WHERE id = $id")->fetch();
   }
+
 
   public function insert(): object // Déclarer la méthode publique findBy() avec un paramètre de tableau $params
   {
@@ -104,6 +85,16 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
 
     // Exécuter la requête SQL et récupérer tous les résultats
     return $this->sql($sql)->fetch();
+  }
+
+  public function sumAll(string $column)
+  {
+      $sql = "SELECT SUM($column) AS total_amount, `user_id` FROM $this->table";
+          
+      $sql .= " GROUP BY user_id";
+
+      // Execute the SQL query and fetch all results
+      return $this->sql($sql)->fetchAll();
   }
 
 

@@ -13,9 +13,8 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
 
 require_once ROOT.'/Views/inc/header.php';
 ?>
-
 <div class="container">
-  <h1>Savings</h1>
+  <h1>goal</h1>
 
   <?= $form ?>
 
@@ -29,21 +28,20 @@ require_once ROOT.'/Views/inc/header.php';
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($savings as $saving) : 
-                if ($saving->user_id == $_SESSION['user']['id']) :?>?>
+      <?php foreach ($goals as $goal) : ?>
         <tr>
-          <th scope="row"><?= $saving->id; ?>
+          <th scope="row"><?= $goal->id; ?>
           </th>
-          <td><?= $saving->title; ?>
+          <td><?= $goal->title; ?>
           </td>
-          <td><?= $saving->amount; ?>€
+          <td><?= $goal->amount; ?>€
           </td>
           <td>
-            <a href=<?= "index?p=saving/index/$saving->id"; ?> class='btn btn-light'>Modifier</a>
-            <a href=<?= "index?p=saving/delete/$saving->id"; ?> class='btn orangeRadiant'>Supprimer</a>
+            <a href=<?= "index?p=goal/index/$goal->id"; ?> class='btn greenRadient'>Modifier</a>
+            <a href=<?= "index?p=goal/delete/$goal->id"; ?> class='btn btn-light'>Supprimer</a>
           </td>
         </tr>
-      <?php endif; endforeach ?>
+      <?php endforeach ?>
     </tbody>
   </table>
 

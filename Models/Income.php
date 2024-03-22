@@ -14,6 +14,11 @@
       $this->table = strtolower(str_replace(__NAMESPACE__.'\\', '', __CLASS__));
     }
 
+    public function findAllById(int $id)
+    {
+      return $this->sql("SELECT * FROM {$this->table} WHERE `user_id` = $id")->fetchAll();
+    }
+    
     /**
      * Get the value of id
      */

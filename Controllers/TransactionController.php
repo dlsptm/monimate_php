@@ -36,8 +36,8 @@ class TransactionController extends Controller
       }
 
       // on vérfie que l'input amount a bien une valeur numérique
-      if (!is_numeric($_POST['amount'])) {
-        $_SESSION['error'] = 'Le montant doit être un nombre.';
+      if (filter_var($_POST['amount'], FILTER_VALIDATE_FLOAT) === false) {
+        $_SESSION['error'] = 'Le montant doit être un nombre valide.';
       }
 
       // on vérifie que l'utilisateur a mis une valeur de plus de 2 caractères
@@ -53,7 +53,7 @@ class TransactionController extends Controller
       // Si aucune erreur n'a été définie, procéder à l'inscription
       if (!isset($_SESSION['error'])) {
         $title = htmlspecialchars(strip_tags(trim($_POST['title'])));
-        $amount = htmlspecialchars(strip_tags(trim($_POST['amount'])));
+        $amount = number_format(htmlspecialchars(strip_tags(trim($_POST['amount']))), 2);
         $location = htmlspecialchars(strip_tags(trim($_POST['location'])));
 
         $transaction->setTitle($title);
@@ -68,7 +68,7 @@ class TransactionController extends Controller
           $transaction->setIsMonthly(1);
         }
 
-        if ($id)  {
+        if ($id) {
           $transaction->update($id);
         } else {
           $transaction->insert($transaction);
@@ -137,20 +137,20 @@ class TransactionController extends Controller
           $invoice->setHref($newname . '.' . $extension);
 
 
-          
+
           if ($id) {
             $oldFile =  ROOT . "/public/assets/upload/invoices/$inv->href";
-            
+
             if (file_exists($oldFile)) {
               unlink($oldFile);
             }
-            
+
             $invoice->update($id);
-          }else {
+          } else {
             // on le met dans la colone transaction_id
             $invoice->setTransactionId($transactionId);
-          $invoice->insert($invoice); 
-        }
+            $invoice->insert($invoice);
+          }
 
           // on réccupère le dernier ID du invoice afin de le transmettre à transaction
           $invoiceId = $invoice->getLastInsertId();
@@ -193,7 +193,7 @@ class TransactionController extends Controller
       ] : [
         'class' => 'form-check-input'
       ])
-      ->addLabel( $id ? 'Modifier la facture' : 'Télécharger une facture', 'hasInvoice', ['class' => 'form-check-label'], 'form-check my-3')
+      ->addLabel($id ? 'Modifier la facture' : 'Télécharger une facture', 'hasInvoice', ['class' => 'form-check-label'], 'form-check my-3')
       ->addInput('checkbox', 'hasInvoice', isset($transac) && $transac->invoice_id !== null ? [
         'id' => 'hasInvoice',
         'checked' => true,
@@ -222,12 +222,12 @@ class TransactionController extends Controller
 
   public function read()
   {
-        // protection des routes 
-        if (!isset($_SESSION['user'])) {
-          header('Location: index?p=security/login');
-          exit;
-        }
-        
+    // protection des routes 
+    if (!isset($_SESSION['user'])) {
+      header('Location: index?p=security/login');
+      exit;
+    }
+
     $transaction = new Transaction();
     // on prépare la jointure
     $columns = 't.*, c.title AS category_title, i.href as invoice_href';
@@ -293,4 +293,110 @@ class TransactionController extends Controller
       exit;
     }
   }
+
+  public function invoice(int $id)
+  {
+    // protection des routes 
+    if (!isset($_SESSION['user'])) {
+      header('Location: index?p=security/login');
+      exit;
+    }
+
+
+    $invoice = new Invoice();
+    $transaction = new Transaction();
+
+    if (isset($_POST) && !empty($_POST)) {
+      // vérification si tous les champs sont bien remplis 
+      if (!Form::validate($_POST, ['title'])) {
+        $_SESSION['error'] = 'Veuillez remplir tous les champs du formulaire.';
+      }
+      if (!Form::validate($_FILES, ['href'])) {
+        $_SESSION['error'] = 'Veuillez remplir tous les champs du formulaire.';
+      }
+
+    if (!isset($_SESSION['error'])) {
+      $title = htmlspecialchars(strip_tags(trim($_POST['title'])));
+      
+       // on vérifie le type mime du fichier
+       $allowed = [
+        'jpg' => 'image/jpg',
+        'jpeg' => 'image/jpg',
+        'png' => 'image/png',
+        'webapp' => 'image/webapp',
+        'pdf' => 'application/pdf'
+      ];
+
+      $filename = $_FILES['href']['name'];
+      $filetype = $_FILES['href']['type'];
+      $filesize = $_FILES['href']['size'];
+
+      $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+      //on vérifie l'absence de l'extension dans les clés $allowed ou l'absence du type MIME dans les valeurs
+      if (!array_key_exists($extension, $allowed) || !in_array($filetype, $allowed)) {
+        $_SESSION['error'] = 'Le type du fichier n\'est pas autorisé. Nous acception les fichiers pdf, png, jpg/jpeg et webapp';
+      }
+
+      // Ici le type est correct
+      // on vérifie le poids en la limitant à 3Mo
+      if ($filesize > (1024 * 1024) * 5) {
+        $_SESSION['error'] = 'Le fichier est trop volumineux (Maximum 5Mo)';
+      }
+
+      // on génère un nom unique
+      $date = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('Y-m-d-H-i-s');
+
+      $newname = $title . '_' . $date;
+
+      // la route où le fichier doit se mettre
+      $newfilename = ROOT . "/public/assets/upload/invoices/$newname.$extension";
+
+      // erreur si l'envoit du fichier dans le dossier correspond a échoué
+      if (!move_uploaded_file($_FILES['href']['tmp_name'], $newfilename)) {
+        $_SESSION['error'] = 'Une erreur s\'est produite. Veuillez recommencer.';
+      }
+
+      // 6 = le propriétaire a le droit de lecture et d'écriture
+      // 44 = le groupe et le visiteur a le droit de lecture.
+      chmod($newfilename, 0644);
+
+      $data = [
+        'title' => $title,
+        'href' => $newname . '.' . $extension,
+        'transactionId' => $id
+      ];
+
+      $invoice->setter($data);
+      $invoice->insert($invoice);
+
+      $transaction->setInvoiceId($invoice->getLastInsertId());
+      $transaction->update($id);
+
+      header('Location: index?p=transaction/read');
+      exit;
+    }
+
+  }
+
+
+    $form = new Form();
+
+    $form
+      ->startForm('post', '', ['class' => '', "enctype" => "multipart/form-data"])
+      ->addLabel('Titre de la facture', 'title', ['class' => 'col invoices-info form-label'], 'my-3')
+      ->addInput('text', 'title', ['class' => 'invoices-info form-control'])
+      ->addLabel('Fichier', 'href', ['class' => 'invoices-info'], 'my-3')
+      ->addInput('file', 'href', ['class' => 'invoices-info form-control'])
+
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn my-3 text-white'])
+      ->endForm();
+
+
+    // Afficher le formulaire
+    return $this->render('transaction/invoice', [
+      'title' => 'Ajouter une facture',
+      'description' => 'ceci est la description',
+      'form' => $form->create()
+    ]);  }
 }

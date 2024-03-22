@@ -1,0 +1,35 @@
+# QUESTIONS QU’ON M’A POSE DURANT MES ENTRETIENTS
+
+** note : j’étais en visio avec le lead dev et j’étais en partage d’écran sur mon ancien projet que j’avais fais en Symfony ** 
+
+### Temps de l’entretien : devait durer 30 minutes, a finalement durée 1h20
+
+ 1) Quelles langages tu utilises / tu te sens à l’aise ? **
+
+** 2) A quoi correspondent les méthodes HTTP ?  **
+
+** 3) As-tu fais du Docker ?  **
+
+** 4) (J’avais utilisé du JWT pour le Token), A quoi sert le JWT ? **
+
+** 5) Dans PhpMyAdmin, Requête-moi tous tes users.  **
+
+** 6) Active tous les utilisateurs qui ne le sont déjà pas? **
+
+** 7) Quel est le principe d’une jointure en SQL ? Pourquoi utilise-t-on des préfixes ? **
+
+** 8) En PHP, Connais-tu la programmation orienté objet ? Qu’en penses-tu ? **
+
+** 9) Lorsque j’ai montré mon projet, il m’a demandé de commenter ma méthode Register dans mon SecurityController. **
+
+** 10) Comment es-tu en intégration ? Comment te sens-tu en HTML / CSS ? **
+
+** 11) Comment marche le flex ?  **
+
+** 12) Qu’est-ce que le Z-index et comment l’activer ?  **
+
+** 13) As-tu appris à utiliser le Profiler de Symfony ?  **
+
+** 14) Comment tu t’en sors en GIT ?  **
+
+** 15) Fais-tu de la veille ?  **

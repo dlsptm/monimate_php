@@ -102,6 +102,7 @@ class SecurityController extends Controller
 
     if (isset($_SESSION['user'])) {
       header('Location: index');
+      exit;
     }
 
     // Afficher le formulaire
@@ -140,9 +141,9 @@ class SecurityController extends Controller
           if ($user->getActive() === 1) {
             $user->getSession();
             header('Location: index');
+            exit;
           } else {
             $_SESSION["error"] = 'Votre compte n\'est pas activé. Veuillez vérifier vos e-mails.';
-            header('Location : index?p=security/login');
           }
         } else {
           $_SESSION["error"] = 'L\'adresse email ou le mot de passe est incorrect';
@@ -167,6 +168,7 @@ class SecurityController extends Controller
 
     if (isset($_SESSION['user'])) {
       header('Location: index');
+      exit;
     }
     // Afficher le formulaire
     return $this->render('security/login', [
@@ -189,6 +191,7 @@ class SecurityController extends Controller
 
     // redirection 
     header('Location: index');
+    exit;
   }
 
   public function activate(string $token)
@@ -342,6 +345,7 @@ class SecurityController extends Controller
 
     if (isset($_SESSION['user'])) {
       header('Location: index');
+      exit;
     }
     // Afficher le formulaire
     return $this->render('security/new_password', [

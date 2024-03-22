@@ -13,14 +13,12 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
 
 require_once ROOT.'/Views/inc/header.php';
 ?>
+  <div class="container my-5">
+  <h1 class='mb-3'>Transactions</h1>
 
+  <a href="index?p=transaction/index" class='btn orangeRadiant mb-4 text-white'>Ajouter une transaction</a>
 
-<?php if (!isset($transac)) : ?></p>
-
-  <div class="container">
-  <h1>Transactions</h1>
-
-
+  <div class="table-responsive">
   <table class="table">
     <thead>
       <tr>
@@ -37,7 +35,10 @@ require_once ROOT.'/Views/inc/header.php';
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($transactions as $transaction) : ?>
+      <?php foreach ($transactions as $transaction) : 
+        if ($transaction->user_id == $_SESSION['user']['id']) :
+        ?>
+        
         <tr>
           <th scope="row"><?= $transaction->id; ?>
           </th>
@@ -47,32 +48,17 @@ require_once ROOT.'/Views/inc/header.php';
           <td><?= $transaction->created_at; ?></td>
           <td><?= $transaction->category_title; ?></td>
           <td>x<?= $transaction->payment_option; ?></td>
-          <td><?= $transaction->is_monthly == 0 ? 'Oui' : 'Non'; ?></td>
-          <td><?= $transaction->invoice_href !== null ? '<a href="./assets/upload/invoices/' . $transaction->invoice_href . '" target="_blank">Facture</a>' : '<a href="index?p=transaction/invoice/' . $transaction->id . '" target="_blank">Ajouter une facture</a>' ?></td>
+          <td><?= $transaction->is_monthly == 1 ? 'Oui' : 'Non'; ?></td>
+          <td><?= $transaction->invoice_href !== null ? '<a href="./assets/upload/invoices/' . $transaction->invoice_href . '" target="_blank" class="btn btn-light">Facture</a>' : '<a href="index?p=transaction/invoice/' . $transaction->id . '" target="_blank" class="btn btn-light">Ajouter une facture</a>' ?></td>
           <td>
-            <a href=<?= "index?p=transaction/index/$transaction->id"; ?> class='btn greenRadient'>Modifier</a>
-            <a href=<?= "index?p=transaction/delete/$transaction->id"; ?> class='btn btn-light' onclick='confirm("Êtes vous sur de vouloir le supprimer ?")'>Supprimer</a>
+            <a href=<?= "index?p=transaction/index/$transaction->id"; ?> class='btn greenRadient text-white'>Modifier</a>
+            <a href=<?= "index?p=transaction/delete/$transaction->id"; ?> class='btn orangeRadiant text-white' onclick='confirm("Êtes vous sur de vouloir le supprimer ?")'>Supprimer</a>
           </td>
         </tr>
-      <?php endforeach ?>
+      <?php 
+      endif;
+      endforeach ?>
     </tbody>
   </table>
-
-<?php else :   ?>
-
-  <h1>Transaction #<?= $transac->id; ?></h1>
-  <p><?= $transac->title; ?></p>
-  <p><?= $transac->amount; ?>€</p>
-  <p><?= $transac->location; ?></p>
-  <p><?= $transac->created_at; ?></p>
-  <p><?= $transac->category_title; ?></p>
-  <p>x<?= $transac->payment_option; ?></p>
-  <p><?= $transac->is_monthly == 0 ? 'Oui' : 'Non'; ?></p>
-  <p><?= $transac->invoice_href != null ? '<a href="./assets/upload/invoices/' . $transac->invoice_href . '" target="_blank">Facture</a>' : 'Pas de facture' ?></p>
-  <p>
-    <a href=<?= "index?p=transaction/index/$transac->id"; ?> class='btn btn-info'>Modifier</a>
-    <a href=<?= "index?p=transaction/delete/$transac->id"; ?> class='btn btn-warning' onclick='confirm("Êtes vous sur de vouloir le supprimer ?")'>Supprimer</a>
-  </p>
-
-<?php endif ?>
+  </div>
 </div>

@@ -28,7 +28,8 @@ require_once ROOT.'/Views/inc/header.php';
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($incomes as $income) : ?>
+      <?php foreach ($incomes as $income) : 
+        if ($income->user_id == $_SESSION['user']['id']) :?>
         <tr>
           <th scope="row"><?= $income->id; ?>
           </th>
@@ -41,7 +42,7 @@ require_once ROOT.'/Views/inc/header.php';
             <a href=<?= "index?p=income/delete/$income->id"; ?> class='btn btn-light'>Supprimer</a>
           </td>
         </tr>
-      <?php endforeach ?>
+      <?php endif; endforeach ?>
     </tbody>
   </table>
 

@@ -10,9 +10,5 @@ use App\Core\Router;
   $main = new Router();
   $main->start();
 
-  // on importe home/index par défaut lorsque l'utilisateur n'est pas connecté
-  if (!isset($_SESSION['user']) && $_SERVER["REQUEST_URI"] == '/monimate_php/public/index') {
-    require_once ROOT.'/Views/home/index.php';
-  }
 
 ?>

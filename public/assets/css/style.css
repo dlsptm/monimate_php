@@ -73,6 +73,10 @@ body {
   color: var(--white)
 }
 
+.colorOther {
+  color: #414C8F;
+}
+
 .orangeRadiant {
   background: var(--gradient-orange);
 }
@@ -87,6 +91,10 @@ body {
 
 .colorGreen {
   color: #9BEDEA;
+}
+
+.color-black {
+  color: var(--black)
 }
 
 .img-round {
@@ -135,6 +143,21 @@ body {
   opacity: 20%;
 }
 
+textarea {
+  resize: none;
+}
+
+#category-icon {
+  width: 4rem;
+}
+
+.border-radius-customized {
+  border-radius: 20px;
+}
+
+
+
+
 
 @media only screen and (max-width: 991px) {
   .img-round {
@@ -145,6 +168,17 @@ body {
     background: none;
   }
 
+  .customized-margin {
+    margin: 100px;
+  }
+
+  .border-radius-customized {
+    border-radius: 10px;
+  }
+
+  #category-icon {
+    width: 3rem;
+  }
 }
 
 @media only screen and (max-width: 600px) {

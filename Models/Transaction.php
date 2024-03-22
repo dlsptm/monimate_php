@@ -18,11 +18,41 @@
     public function __construct() {
       parent::__construct(); // Appeler le constructeur de la classe parente Model
       $this->table = strtolower(str_replace(__NAMESPACE__.'\\', '', __CLASS__));
-      $this->created_at = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('d-m-Y'); // Date actuelle au format MySQL datetime avec l'heure de Paris
-
+      $this->created_at = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('Y-m-d');
+      $this->is_monthly = 0;
     }
 
-
+    public function SumAllByCategory()
+    {
+        $sql = "SELECT SUM(amount) AS total_amount, `user_id`, `category_id` FROM $this->table";
+      
+        // Group by category_id and user_id
+        $sql .= " GROUP BY category_id, user_id";
+            
+        // Execute the SQL query and fetch all results
+        return $this->sql($sql)->fetchAll();
+    }
+    
+    
+    public function findAllWithJoinAndLimit(string $columns, array $joins)
+    {
+      $alias = strtolower(substr($this->table, 0, 1));
+      $sql = "SELECT $columns FROM $this->table $alias";
+      
+      // Construire la clause JOIN
+      // left join afin d'avoir toutes les données 
+      // inner join retourne uniquement les colones avec des jointures
+      foreach ($joins as $join) {
+        $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
+      }
+      
+      $sql .= " ORDER BY $alias.id DESC";
+      $sql .= " LIMIT 5"; // Ajout de la limite
+      
+      return $this->sql($sql)->fetchAll();
+    }
+    
+    
 
     /**
      * Get the value of id

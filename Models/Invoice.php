@@ -15,7 +15,6 @@
       $this->title = "Facture ".$this->title;
     }
 
-
     public function findOnebyTransactionId(string $id)
     {   
 
