@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\Income;
+
 abstract class Controller
 {
 
@@ -15,5 +17,4 @@ abstract class Controller
     
   }
   
-
 }

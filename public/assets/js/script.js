@@ -1,5 +1,20 @@
+const url = window.location.href;
+const segments = url.split('/');
+const lastSegment = segments.pop();
+const id = !isNaN(lastSegment) ? lastSegment : null;
+
+console.log(id);
+
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("index?p=income/getIncomes")
+
+  let fetchURL = "index?p=api/getIncomes";
+  if (id !== null) {
+    fetchURL += '/' + id;
+  }
+
+
+  fetch(fetchURL)
+
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erreur lors de la récupération des données");

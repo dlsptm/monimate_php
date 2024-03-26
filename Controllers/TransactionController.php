@@ -230,7 +230,7 @@ class TransactionController extends Controller
 
     $transaction = new Transaction();
     // on prépare la jointure
-    $columns = 't.*, c.title AS category_title, i.href as invoice_href';
+    $columns = 't.*, c.title AS category_title, c.icon as category_icon, i.href as invoice_href';
     $joins = [
       ['table' => 'category c', 'condition' => 't.category_id = c.id'],
       ['table' => 'invoice i', 'condition' => 't.invoice_id = i.id']
@@ -399,4 +399,29 @@ class TransactionController extends Controller
       'description' => 'ceci est la description',
       'form' => $form->create()
     ]);  }
+
+    public function category ($id)
+    {
+
+          // protection des routes 
+    if (!isset($_SESSION['user'])) {
+      header('Location: index?p=security/login');
+      exit;
+    }
+
+      $transactions = new Transaction;
+
+      $columns = 't.*, c.title AS category_title, i.href as invoice_href';
+      $joins = [
+        ['table' => 'category c', 'condition' => 't.category_id = c.id'],
+        ['table' => 'invoice i', 'condition' => 't.invoice_id = i.id']
+      ];
+
+    // Afficher le formulaire
+    return $this->render('transaction/category', [
+      'title' => 'Ajouter une facture',
+      'description' => 'ceci est la description',
+      'transactions' => $transactions->findAllWithJoinByCategory($columns, $joins, $id)
+    ]);    
+  }
 }

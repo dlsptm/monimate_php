@@ -18,7 +18,8 @@ elseif (isset($_SESSION['success']) && !empty($_SESSION["success"])) : ?>
 require_once ROOT.'/Views/inc/header.php';
 ?>
   <div class="container my-5">
-  <h1 class='mb-3'>Transactions</h1>
+  <h1 class='mb-3'>Transaction de la categorie <?= $transactions[0]->category_title; ?> 
+  </h1>
 
   <a href="index?p=transaction/index" class='btn orangeRadiant mb-4 text-white'>Ajouter une transaction</a>
 
@@ -31,7 +32,6 @@ require_once ROOT.'/Views/inc/header.php';
         <th scope="col">Montant</th>
         <th scope="col">Lieu d'achat</th>
         <th scope="col">Date</th>
-        <th scope="col">Catégorie</th>
         <th scope="col">Option</th>
         <th scope="col">Transaction courante</th>
         <th scope="col">Facture</th>
@@ -50,12 +50,6 @@ require_once ROOT.'/Views/inc/header.php';
           <td><?= Utils::numberFormat($transaction->amount); ?>€</td>
           <td><?= $transaction->location; ?></td>
           <td><?= $transaction->created_at; ?></td>
-          <td class='flex-column justify-content-center align-items-center text-center'>
-            <figure class="<?= strtolower($transaction->category_title); ?> border-radius-20 d-flex justify-content-center align-items-center">
-                  <img src="assets/upload/categories_icon/<?= $transaction->category_icon; ?>" alt="<?= $transaction->category_title; ?>" class=" p-2 opacity-20" width='30'>
-              </figure>
-              <?= $transaction->category_title; ?>
-          </td>
           <td>x<?= $transaction->payment_option; ?></td>
           <td><?= $transaction->is_monthly == 1 ? 'Oui' : 'Non'; ?></td>
           <td><?= $transaction->invoice_href !== null ? '<a href="./assets/upload/invoices/' . $transaction->invoice_href . '" target="_blank" class="btn btn-light">Facture</a>' : '<a href="index?p=transaction/invoice/' . $transaction->id . '" target="_blank" class="btn btn-light">Ajouter une facture</a>' ?></td>

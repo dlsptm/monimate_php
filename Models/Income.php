@@ -14,9 +14,17 @@
       $this->table = strtolower(str_replace(__NAMESPACE__.'\\', '', __CLASS__));
     }
 
-    public function findAllById(int $id)
+    public function findAllById(int $id, $date=null)
     {
-      return $this->sql("SELECT * FROM {$this->table} WHERE `user_id` = $id")->fetchAll();
+        $sql = "SELECT * FROM {$this->table} WHERE `user_id` = $id";
+
+        if (isset($date) && strlen($date) == 4) {
+            $sql.= " AND YEAR(created_at) = $date";
+          } else if (isset($date)){
+            $sql.= " AND MONTH(created_at) = $date";
+          }
+
+      return $this->sql($sql)->fetchAll();
     }
     
     /**

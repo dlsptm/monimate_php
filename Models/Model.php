@@ -87,9 +87,15 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     return $this->sql($sql)->fetch();
   }
 
-  public function sumAll(string $column)
+  public function sumAll(string $column, $date=null)
   {
       $sql = "SELECT SUM($column) AS total_amount, `user_id` FROM $this->table";
+
+      if (isset($date) && !empty($date) && strlen($date) == 4) {
+        $sql.= " WHERE YEAR(created_at) = $date";
+      } else if (isset($date) && !empty($date)) {
+        $sql.= " WHERE MONTH(created_at) = $date";
+      }
           
       $sql .= " GROUP BY user_id";
 

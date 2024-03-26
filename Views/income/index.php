@@ -1,4 +1,8 @@
-<?php if (isset($_SESSION['error']) && !empty($_SESSION["error"])) : ?>
+<?php
+
+use App\Utils\Utils;
+
+ if (isset($_SESSION['error']) && !empty($_SESSION["error"])) : ?>
   <div class="alart alert-danger" role='alert'>
     <?php echo $_SESSION["error"];
     unset($_SESSION['error']); ?>
@@ -35,11 +39,11 @@ require_once ROOT.'/Views/inc/header.php';
           </th>
           <td><?= $income->title; ?>
           </td>
-          <td><?= $income->amount; ?>€
+          <td><?= Utils::numberFormat($income->amount); ?>€
           </td>
           <td>
             <a href=<?= "index?p=income/index/$income->id"; ?> class='btn greenRadient'>Modifier</a>
-            <a href=<?= "index?p=income/delete/$income->id"; ?> class='btn btn-light'>Supprimer</a>
+            <a href=<?= "index?p=income/delete/$income->id"; ?> class='btn btn-light'               onclick='confirm("Êtes vous sur de vouloir le supprimer ?")'>Supprimer</a>
           </td>
         </tr>
       <?php endif; endforeach ?>

@@ -113,16 +113,5 @@ class IncomeController extends Controller
     }
   }
 
-  public function getIncomes ()
-  {
 
-      $id = $_SESSION['user']['id'];
-      $income = new Income;
-      $getIncome = $income->findAllById($id);
-
-      header('Content-Type: application/json');
-      echo json_encode($getIncome) ;
-
-
-  }
 }

@@ -91,7 +91,6 @@ class HomeController extends Controller
     $transaction = new Transaction;
     $categories = new Category;
     $incomes = new Income;
-    $savings = new Saving;
     $goals = new Goal;
 
     $columns = 't.*, c.title AS category_title, c.icon AS category_icon';
@@ -108,8 +107,36 @@ class HomeController extends Controller
       'trcs' => $transaction->findAllWithJoinAndLimit($columns, $joins),
       'categories' => $categories->findAll(),
       'incomes' => $incomes->sumAll('amount'),
-      'savings' => $savings->sumAll('amount'),
+      'savings' => $transaction->sumAllByEconomy(),
       'goals' => $goals->findAll(),
     ]);
   }
+
+  public function date ($date=null)
+  {
+    $transaction = new Transaction;
+    $categories = new Category;
+    $incomes = new Income;
+    $goals = new Goal;
+
+    $currentYear = date('Y');
+    $currentMonth = date('n');
+
+
+    $columns = 't.*, c.title AS category_title, c.icon AS category_icon';
+    $joins = [
+      ['table' => 'category c', 'condition' => 't.category_id = c.id'],
+    ];
+
+    return $this->render('home/date', [
+      'title' => 'Monimate : Votre espace de gestion',
+      'description' => 'ceci est la description',
+      'transactions' => $date ? $transaction->SumAllByCategory($date) : $transaction->SumAllByCategory($date),
+      'transacs' => $transaction->sumAll('amount', $date),
+      'trcs' => $transaction->findAllWithJoinAndLimit($columns, $joins, $date),
+      'categories' => $categories->findAll(),
+      'incomes' => $incomes->sumAll('amount', $date),
+      'savings' => $transaction->sumAllByEconomy($date),
+      'goals' => $goals->findAll(),
+    ]);  }
 }

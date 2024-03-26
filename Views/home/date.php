@@ -21,18 +21,18 @@ require_once ROOT . '/Views/inc/header.php';
   <!-- CALENDAR -->
   <aside class="darkerbg border-radius-20 p-4 d-none d-md-flex d-lg-block justify-content-between">
     <p class="my-4"><a href="index?p=home/date/<?= date('Y') ; ?>" id='year' class="text-dark underline-none">2024</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Jan</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Fev</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Mar</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Avr</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Mai</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Jui</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Juil</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Aou</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Sep</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Oct</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Nov</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Dec</a></p>
+    <p class="my-4"><a href="index?p=home/date/1" class="text-dark underline-none">Jan</a></p>
+    <p class="my-4"><a href="index?p=home/date/2" class="text-dark underline-none">Fev</a></p>
+    <p class="my-4"><a href="index?p=home/date/3" class="text-dark underline-none">Mar</a></p>
+    <p class="my-4"><a href="index?p=home/date/4" class="text-dark underline-none">Avr</a></p>
+    <p class="my-4"><a href="index?p=home/date/5" class="text-dark underline-none">Mai</a></p>
+    <p class="my-4"><a href="index?p=home/date/6" class="text-dark underline-none">Jui</a></p>
+    <p class="my-4"><a href="index?p=home/date/7" class="text-dark underline-none">Juil</a></p>
+    <p class="my-4"><a href="index?p=home/date/8" class="text-dark underline-none">Aou</a></p>
+    <p class="my-4"><a href="index?p=home/date/9" class="text-dark underline-none">Sep</a></p>
+    <p class="my-4"><a href="index?p=home/date/10" class="text-dark underline-none">Oct</a></p>
+    <p class="my-4"><a href="index?p=home/date/11" class="text-dark underline-none">Nov</a></p>
+    <p class="my-4"><a href="index?p=home/date/12" class="text-dark underline-none">Dec</a></p>
   </aside>
 
   <main class="w-100 my-3">

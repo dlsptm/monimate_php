@@ -22,19 +22,46 @@
       $this->is_monthly = 0;
     }
 
-    public function SumAllByCategory()
+    public function SumAllByCategory($date=null)
     {
         $sql = "SELECT SUM(amount) AS total_amount, `user_id`, `category_id` FROM $this->table";
       
+        if (isset($date) && strlen($date) == 4) {
+            $sql.= " WHERE YEAR(created_at) = $date";
+          } else if (isset($date)){
+            $sql.= " WHERE MONTH(created_at) = $date";
+          }
+
         // Group by category_id and user_id
         $sql .= " GROUP BY category_id, user_id";
             
         // Execute the SQL query and fetch all results
         return $this->sql($sql)->fetchAll();
     }
+
+    public function sumAllByEconomy($date=null)
+    {
+        $sql = "SELECT SUM(amount) AS total_amount, `user_id`, `category_id` FROM $this->table";
+      
+        // Filtrer uniquement les enregistrements avec l'ID de catégorie "economy"
+        $sql .= " WHERE `category_id` = 5";
+
+        if (isset($date) && strlen($date) == 4) {
+            $sql.= " AND YEAR(created_at) = $date";
+          } else if (isset($date)) {
+            $sql.= " AND MONTH(created_at) = $date";
+          }
+          
+        // Grouper par user_id
+        $sql .= " GROUP BY user_id";
+            
+        // Exécuter la requête SQL et récupérer tous les résultats
+        return $this->sql($sql)->fetchAll();
+    }
     
     
-    public function findAllWithJoinAndLimit(string $columns, array $joins)
+    
+    public function findAllWithJoinAndLimit(string $columns, array $joins, $date=null)
     {
       $alias = strtolower(substr($this->table, 0, 1));
       $sql = "SELECT $columns FROM $this->table $alias";
@@ -45,6 +72,13 @@
       foreach ($joins as $join) {
         $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
       }
+
+      if (isset($date) && strlen($date) == 4) {
+        $sql.= " WHERE YEAR($alias.created_at) = $date";
+      } else if (isset($date)){
+        $sql.= " WHERE MONTH($alias.created_at) = $date";
+      }
+
       
       $sql .= " ORDER BY $alias.id DESC";
       $sql .= " LIMIT 5"; // Ajout de la limite
@@ -52,7 +86,29 @@
       return $this->sql($sql)->fetchAll();
     }
     
-    
+    public function findAllWithJoinByCategory(string $columns, array $joins, $id, $date=null)
+    {
+      $alias = strtolower(substr($this->table, 0, 1));
+      $sql = "SELECT $columns FROM $this->table $alias";
+      
+      // Construire la clause JOIN
+      // left join afin d'avoir toutes les données 
+      // inner join retourne uniquement les colones avec des jointures
+      foreach ($joins as $join) {
+        $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
+      }
+      $sql .= " WHERE category_id = $id"; // Ajout de la limite
+
+      if (isset($date) && strlen($date) == 4) {
+        $sql.= " AND YEAR($alias.created_at) = $date";
+      } else if (isset($date)){
+        $sql.= " AND MONTH($alias.created_at) = $date";
+      }
+
+      $sql .= " ORDER BY $alias.id DESC";
+      
+      return $this->sql($sql)->fetchAll();
+    }
 
     /**
      * Get the value of id
