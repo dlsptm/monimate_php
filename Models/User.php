@@ -12,6 +12,7 @@
     protected $profile;
     protected $active;
     protected $token;
+    protected $dark_light_mode;
     protected $created_at;
 
     public function __construct() {
@@ -21,6 +22,7 @@
       $this->active = 0;
       $this->created_at = (new \DateTime('now', new \DateTimeZone('Europe/Paris')))->format('Y-m-d H:i:s'); // Date actuelle au format MySQL datetime avec l'heure de Paris
       $this->profile = 'default-profile.png';
+      $this->dark_light_mode = 0;
       }
 
     /**
@@ -71,6 +73,12 @@
     {   
 
         return $this->sql("SELECT * FROM $this->table WHERE token = ?", [$token])->fetch();
+    }
+
+    public function getMode(int $id)
+    {   
+
+        return $this->sql("SELECT dark_light_mode FROM $this->table WHERE id = ?", [$id])->fetch();
     }
 
     /**
@@ -209,5 +217,20 @@
     }
 
 
+
+    /**
+     * Get the value of dark_light_mode
+     */
+    public function getDarkLightMode() {
+        return $this->dark_light_mode;
+    }
+
+    /**
+     * Set the value of dark_light_mode
+     */
+    public function setDarkLightMode($dark_light_mode): self {
+        $this->dark_light_mode = $dark_light_mode;
+        return $this;
+    }
   }
 

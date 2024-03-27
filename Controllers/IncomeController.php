@@ -9,7 +9,7 @@ use App\Models\Income;
 class IncomeController extends Controller
 {
 
-  public function index(string $id = null)
+  public function index(string $id = null, $date=null)
   {
     if (!isset($_SESSION['user'])) {
       header('Location: index?p=security/login');
@@ -25,7 +25,7 @@ class IncomeController extends Controller
 
     if (isset($_POST) && !empty($_POST)) {
       // vérification si tous les champs sont bien remplis 
-      if (!Form::validate($_POST, ['title', 'amount'])) {
+      if (!Form::validate($_POST, ['title', 'amount', 'date'])) {
         $_SESSION['error'] = 'Veuillez remplir tous les champs du formulaire.';
       }
 
@@ -41,12 +41,14 @@ class IncomeController extends Controller
       if (!isset($_SESSION['error'])) {
         $title = htmlspecialchars(strip_tags(trim($_POST['title'])));
         $amount = htmlspecialchars(strip_tags(trim($_POST['amount'])));
+        $date = htmlspecialchars(strip_tags(trim($_POST['date'])));
 
 
         $data = [
           'title' => $title, 
           'amount' => $amount, 
-          'userId' => $_SESSION['user']['id']
+          'userId' => $_SESSION['user']['id'],
+          'createdAt' => $date
         ];
 
         $income->setter($data);
@@ -71,6 +73,8 @@ class IncomeController extends Controller
       ->addInput('text', 'title', ['required' => true, 'value' => $inc->title ?? '', 'class' => 'form-control'])
       ->addLabel('Montant', 'amount', ['class' => 'form-label'], 'my-3')
       ->addInput('text', 'amount', ['required' => true, 'value' => $inc->amount ?? '', 'class' => 'form-control'])
+      ->addLabel('Date', 'date', ['class' => 'form-label'], 'my-3')
+      ->addInput('date', 'date', ['required' => true, 'value' => $inc->created_at ?? '', 'class' => 'form-control'])
       ->addSubmit('Valider', ['class' => 'btn form-submit-btn my-3 text-white'])
       ->endForm();
 
@@ -78,7 +82,7 @@ class IncomeController extends Controller
     // Afficher le formulaire
     $this->render('income/index', [
       'title' => $id ? 'Modifier une source d\'entrée' : 'Ajouter une une source d\'entrée',
-      'description' => 'ceci est la description',
+      'description' => 'Gestionnaire de vos ressources d\'argent',
       'form' => $form->create(),
       'incomes' => $income->findAll()
     ]);

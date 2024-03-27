@@ -220,7 +220,7 @@ class TransactionController extends Controller
   }
 
 
-  public function read()
+  public function read($date=null)
   {
     // protection des routes 
     if (!isset($_SESSION['user'])) {
@@ -240,7 +240,7 @@ class TransactionController extends Controller
     return $this->render('transaction/read', [
       'title' => 'Les Transactions',
       'description' => 'ceci est la description',
-      'transactions' => $transaction->findAllWithJoin($columns, $joins)
+      'transactions' => $date ? $transaction->findAllWithJoin($columns, $joins, $date) : $transaction->findAllWithJoin($columns, $joins)
     ]);
   }
 
@@ -400,7 +400,7 @@ class TransactionController extends Controller
       'form' => $form->create()
     ]);  }
 
-    public function category ($id)
+    public function category ($id, $date=null)
     {
 
           // protection des routes 
@@ -421,7 +421,7 @@ class TransactionController extends Controller
     return $this->render('transaction/category', [
       'title' => 'Ajouter une facture',
       'description' => 'ceci est la description',
-      'transactions' => $transactions->findAllWithJoinByCategory($columns, $joins, $id)
+      'transactions' => $date ? $transactions->findAllWithJoinByCategory($columns, $joins, $id, $date) : $transactions->findAllWithJoinByCategory($columns, $joins, $id)
     ]);    
   }
 }

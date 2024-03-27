@@ -108,7 +108,7 @@ class SecurityController extends Controller
     // Afficher le formulaire
     $this->render('security/register', [
       'title' => 'Bienvenue dans Monimate : Inscription',
-      'description' => 'ceci est la description',
+      'description' => 'Inscrivez-vous chez Monimate',
       'form' => $form->create()
     ]);
   }
@@ -146,8 +146,8 @@ class SecurityController extends Controller
             $_SESSION["error"] = 'Votre compte n\'est pas activé. Veuillez vérifier vos e-mails.';
           }
         } else {
-          $_SESSION["error"] = 'L\'adresse email ou le mot de passe est incorrect';
           header('Location : index?p=security/login');
+          $_SESSION["error"] = 'L\'adresse email ou le mot de passe est incorrect';
           exit;
         }
       }
@@ -173,7 +173,7 @@ class SecurityController extends Controller
     // Afficher le formulaire
     return $this->render('security/login', [
       'title' => 'Bienvenue dans Monimate : Connexion',
-      'description' => 'ceci est la description',
+      'description' => 'Connecter-vous chez Monimate',
       'form' => $form->create()
     ]);
   }
@@ -282,14 +282,14 @@ class SecurityController extends Controller
       ->addSubmit('Valider', ['class' => 'btn form-submit-btn mb-3 text-white'])
       ->endForm();
       $this->render('security/reset', [
-        'title' => 'Modifier le mot de passe',
-        'description' => 'ceci est la description',
+        'title' => 'Mot de passe oublié ?',
+        'description' => 'Insérer votre mail afin de modifier votre mot de passe',
         'form' => $form->create()
       ]);  
   }
 
 
-  public function newPassword(string $token)
+  public function newPassword(string $token=null)
   {
 
     if (isset($_POST) && !empty($_POST)) {
@@ -350,7 +350,7 @@ class SecurityController extends Controller
     // Afficher le formulaire
     return $this->render('security/new_password', [
       'title' => 'Modifier le mot de passe',
-      'description' => 'ceci est la description',
+      'description' => 'Modifiez votre mot de passe',
       'form' => $form->create()
     ]);
 
@@ -358,6 +358,267 @@ class SecurityController extends Controller
 
   public function profil()
   {
-    return $this->render('security/profil');
+    if (!isset($_SESSION['user'])) {
+      header('Location: index');
+      exit;
+    }
+
+    $user = new User;
+
+    return $this->render('security/profil', [
+      'title' => 'Monimate : votre profil',
+      'description' => 'Votre accès à votre profil',
+      'user' => $user->find($_SESSION['user']['id'])
+    ]);  
+  }
+
+  public function username ($id)
+  {
+
+    $user = new User;
+    $usr = $user->find($_SESSION['user']['id']);
+
+
+    if (isset($_POST) && !empty($_POST)) {
+      // vérification si tous les champs sont bien remplis 
+      if (!Form::validate($_POST, ['username'])) {
+        $_SESSION['error'] = 'Veuillez remplir tous les champs du formulaire.';
+      }
+
+      // vérification si email et username existe déjà
+      if (User::usernameExists($_POST['username'])) {
+        $_SESSION['error'] = 'Un compte existe déjà avec ce pseudo';
+      }
+
+      if (!isset($_SESSION['error'])) {
+        $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
+
+        $data = [
+          'id' => $usr->id,
+          'username' => $username,
+          'email' => $usr->email,
+          'activate' => 1,
+          'darkLightMode' => $usr->dark_light_mode
+        ];
+
+        $user->setter($data);
+        $user->update($id);
+        session_unset();
+        $user->getSession();
+
+        header('Location: index?p=security/profil');
+        exit;
+      }
+
+    }
+
+    $form = new Form();
+
+    // Commencer le formulaire
+    $form
+      ->startForm('post', '', ['class' => 'form'])
+      ->addLabel('Nouveau pseudo', 'username', ['class' => 'form-label'], 'my-3')
+      ->addInput('username', 'username', ['required' => true, 'class' => 'form-control', 'value' => $usr->username])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn mb-3 text-white'])
+      ->endForm();
+      
+      return $this->render('security/username', [
+        'title' => 'Changer votre pseudo',
+        'description' => 'changer votre pseudo',
+        'form' => $form->create()
+      ]);  
+
+  }
+
+  public function email ($id)
+  {
+
+    $user = new User;
+    $usr = $user->find($_SESSION['user']['id']);
+
+
+    if (isset($_POST) && !empty($_POST)) {
+      // vérification si tous les champs sont bien remplis 
+      if (!Form::validate($_POST, ['email'])) {
+        $_SESSION['error'] = 'Veuillez remplir tous les champs du formulaire.';
+      }
+
+      // vérification si email et username existe déjà
+      if (User::emailExists($_POST['email'])) {
+        $_SESSION['error'] = 'Un compte existe déjà avec ce pseudo';
+      }
+
+      if (!isset($_SESSION['error'])) {
+        $email = htmlspecialchars(strip_tags(trim($_POST['email'])));
+
+        $token = hash('sha256', uniqid());
+
+
+
+        $data = [
+          'id' => $usr->id,
+          'email' => $email,
+          'username' => $usr->username,
+          'token' => $token,
+          'darkLightMode' => $usr->dark_light_mode
+        ];
+
+        $user->setter($data);
+        $user->update($id);
+        session_unset();
+
+        $mailer = new Mail;
+        $mailer->sendEmail(
+          $user->getEmail(),
+          "Monimate : Activez votre compte !",
+          $user->getUsername(),
+          'Votre demande de changement à bien été pris en compte. Afin d\'activer votre compte,veuillez cliquer sur le bouton ci-dessous.<br>Si ce message ne vous concerne pas. Veuillez l\'ignorer.<br> L\'Equipe de Monimate',
+          'index?p=security/activate/' . $user->getToken(),
+          'Activez votre compte'
+        );
+
+        $_SESSION['success'] = 'Votre demande de changement d\'email a bien été pris en compte. Un mail vous a été envoyé afin d\'activer votre compte.';
+
+
+        header('Location: index?p=security/login');
+        exit;
+      }
+
+    }
+
+    $form = new Form();
+
+    // Commencer le formulaire
+    $form
+      ->startForm('post', '', ['class' => 'form'])
+      ->addLabel('Nouveau pseudo', 'email', ['class' => 'form-label'], 'my-3')
+      ->addInput('email', 'email', ['required' => true, 'class' => 'form-control', 'value' => $usr->email])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn mb-3 text-white'])
+      ->endForm();
+      
+      return $this->render('security/email', [
+        'title' => 'Changer votre pseudo',
+        'description' => 'changer votre pseudo',
+        'form' => $form->create()
+      ]);  
+
+  }
+
+  public function lightMode ($id)
+  {
+    if (!isset($_SESSION['user'])) {
+      header('Location: index');
+      exit;
+    }
+
+    $user = new User;
+
+    $data = [
+      'darkLightMode' => 0
+    ];
+
+    $user->setter($data);
+    $user->update($id);
+
+
+    header('Location: index');
+    exit;
+  }
+
+  public function darkMode ($id)
+  {
+    if (!isset($_SESSION['user'])) {
+      header('Location: index');
+      exit;
+    }
+
+    $user = new User;
+
+    $data = [
+      'darkLightMode' => 1
+    ];
+
+    $user->setter($data);
+    $user->update($id);
+
+
+    header('Location: index');
+    exit;
+  }
+
+
+  public function modifyPassword(string $id)
+  {
+
+    $user = new User;
+    $userArray = $user->find($id);
+
+            // Si aucun utilisateur n'est trouvé avec le token spécifié
+            if (!$userArray) {
+              $_SESSION["error"] = 'Utilisateur non trouvé';
+              header('Location: index?p=security/login');
+              exit;
+            }
+
+
+    if (isset($_POST) && !empty($_POST)) {
+      // vérification si tous les champs sont bien remplis 
+      if (!Form::validate($_POST, ['password', 'confirm'])) {
+        $_SESSION['error'] = 'Veuillez remplir tous les champs du formulaire.';
+      }
+
+      // Vérification de la correspondance entre les mots de passe
+      if (strlen($_POST['password']) < 3 && $_POST['password'] !== $_POST['confirm']) {
+        $_SESSION['error'] = 'Le mot de passe doit contenir au moins 3 caractères et les mots de passe doivent correspondre';
+      }
+
+      
+      if (password_verify($_POST['password'], $userArray->password)) {
+        $_SESSION['error'] = 'Votre nouveau mot de passe ne doit pas être identique de l\'ancien.';
+    }
+    
+      
+      // Si aucune erreur n'a été définie, procéder à l'inscription
+      if (!isset($_SESSION['error'])) {
+        $password = htmlspecialchars(strip_tags(trim($_POST['password'])));
+
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        
+        // Hydratation de l'objet User avec les données de l'utilisateur trouvé
+        $user->setter($userArray);
+
+        $user->setPassword($password);
+        $user->setActive(1);
+        $user->setToken('');
+        $user->update($user->getId());
+        $_SESSION['success'] = 'Votre mot de passe a bien été modifié.';
+        header('Location: index?p=security/login');
+        exit;
+      }
+    }
+
+    $form = new Form();
+
+    // Commencer le formulaire
+    $form
+      ->startForm('post', '', ['class' => 'form'])
+      ->addLabel('Mot de passe', 'password', ['class' => 'form-label'], 'my-3')
+      ->addInput('password', 'password', ['required' => true, 'class' => 'form-control'])
+      ->addLabel('Confirmer votre mot de passe', 'confirm', ['class' => 'form-label'], 'my-3')
+      ->addInput('password', 'confirm', ['required' => true, 'class' => 'form-control'])
+      ->addSubmit('Valider', ['class' => 'btn form-submit-btn mb-3 text-white'])
+      ->endForm();
+
+    if (!isset($_SESSION['user'])) {
+      header('Location: index');
+      exit;
+    }
+    // Afficher le formulaire
+    return $this->render('security/modify_password', [
+      'title' => 'Modifier le mot de passe',
+      'description' => 'Modifiez votre mot de passe',
+      'form' => $form->create()
+    ]);
+
   }
 }

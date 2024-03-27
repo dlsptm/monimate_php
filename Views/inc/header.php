@@ -66,7 +66,7 @@
     <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
       <ul class="navbar-nav w-100 justify-content-around">
         <li class="nav-item">
-          <a class="btn darkerbg px-5 py-3 text-dark me-2 border-radius-50" href="#">
+          <a class="btn darkerbg px-5 py-3 text-dark me-2 border-radius-50" href="index?p=security/profil">
             <i class="fa-regular fa-user mx-2"></i>
             Mon compte
           </a>							</li>

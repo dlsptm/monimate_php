@@ -3,7 +3,6 @@ const segments = url.split('/');
 const lastSegment = segments.pop();
 const id = !isNaN(lastSegment) ? lastSegment : null;
 
-console.log(id);
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -22,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       var labels = [];
       var amounts = [];
 
@@ -86,3 +84,77 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Erreur :", error);
     });
 });
+
+
+const setPropertyArray = [
+  {
+      key : '--black',
+      color1 : '#0B0B0B',
+      color2 : '#F8F8F8'
+  },
+  {
+      key : '--white',
+      color1 : '#F8F8F8',
+      color2 : '#0B0B0B'
+  },
+  {
+      key : '--darkbg',
+      color1 : '#090E26',
+      color2 : '#f5f5f5'
+  },
+  {
+      key : '--lighterbg',
+      color1 : '#181D39',
+      color2 : '#f4f4f4'
+  },
+  {
+      key : '--darkerbg',
+      color1 : '#f4f4f4',
+      color2 : '#181D39'
+  }
+];
+
+const switchBtn = document.getElementById('switchBtn');
+
+// document.addEventListener("DOMContentLoaded", function () {
+//   fetch("index?p=api/getMode")
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error("Erreur lors de la récupération des données");
+//       }
+//       return response.json();
+//     })
+//     .then((data) => {
+//       console.log(blackTexts);
+
+//       setPropertyArray.forEach((property) => {
+//         if (data.dark_light_mode == 0) {
+//           document.documentElement.style.setProperty(property.key, property.color1);
+
+//           blackTexts.forEach(blackText => {
+            
+//             blackText.replace('text-black', 'text-white');
+//           })
+//         } else {
+//           document.documentElement.style.setProperty(property.key, property.color2);
+//           blackTexts.forEach(blackText => {
+//             blackText.replace('text-white', 'text-black');
+//           })
+//         }
+//       });
+
+//       switchBtn.addEventListener('click', () => {
+//         // Boucle à travers le tableau setPropertyArray pour trouver la propriété correspondante
+//         setPropertyArray.forEach((property) => {
+//           if (data.dark_light_mode == 0) {
+//             document.documentElement.style.setProperty(property.key, property.color2);
+//           } else {
+//             document.documentElement.style.setProperty(property.key, property.color1);
+//           }
+//         });
+//       });
+//     })
+//     .catch((error) => {
+//       console.error("Erreur :", error);
+//     });
+// });

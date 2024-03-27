@@ -143,7 +143,7 @@ class CategoryController extends Controller
     // Afficher le formulaire
     $this->render('category/index', [
       'title' => $id ? 'Modifier une catégorie' : 'Ajouter une catégorie',
-      'description' => 'ceci est la description',
+      'description' => 'Gestionnaire des catégories',
       'form' => $form->create(),
       'categories' => $category->findAll()
     ]);

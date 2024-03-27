@@ -17,8 +17,8 @@ class HomeController extends Controller
   {
 
     return $this->render('home/index', [
-      'title' => 'Modifier une transaction',
-      'description' => 'ceci est la description',
+      'title' => 'Bienvenue chez Monimate',
+      'description' => 'Plateforme de gestion d\'argent',
     ]);
   }
 
@@ -53,8 +53,8 @@ class HomeController extends Controller
     }
 
     return $this->render('home/contact', [
-      'title' => 'Modifier une transaction',
-      'description' => 'ceci est la description',
+      'title' => 'Monimate : Contactez-nous',
+      'description' => 'Formulaire de contact',
     ]);  }
 
 
@@ -67,8 +67,8 @@ class HomeController extends Controller
 
 
     return $this->render('home/legal', [
-      'title' => 'Modifier une transaction',
-      'description' => 'ceci est la description',
+      'title' => 'Monimate : nos mentions légales',
+      'description' => 'Nos mentions légales',
     ]);
   }
 
@@ -80,8 +80,8 @@ class HomeController extends Controller
     }
 
     return $this->render('home/conditions', [
-      'title' => 'Modifier une transaction',
-      'description' => 'ceci est la description',
+      'title' => 'Monimate : nos Conditions d\'utilisation',
+      'description' => 'nos Conditions d\'utilisation',
     ]);
   }
 
@@ -101,7 +101,7 @@ class HomeController extends Controller
 
     return $this->render('home/home', [
       'title' => 'Monimate : Votre espace de gestion',
-      'description' => 'ceci est la description',
+      'description' => 'Votre espace de gestion',
       'transactions' => $transaction->SumAllByCategory(),
       'transacs' => $transaction->sumAll('amount'),
       'trcs' => $transaction->findAllWithJoinAndLimit($columns, $joins),
@@ -119,9 +119,6 @@ class HomeController extends Controller
     $incomes = new Income;
     $goals = new Goal;
 
-    $currentYear = date('Y');
-    $currentMonth = date('n');
-
 
     $columns = 't.*, c.title AS category_title, c.icon AS category_icon';
     $joins = [
@@ -129,8 +126,8 @@ class HomeController extends Controller
     ];
 
     return $this->render('home/date', [
-      'title' => 'Monimate : Votre espace de gestion',
-      'description' => 'ceci est la description',
+      'title' => 'Monimate : Votre espace de gestion préférentiel',
+      'description' => 'Votre espace de gestion préférentiel',
       'transactions' => $date ? $transaction->SumAllByCategory($date) : $transaction->SumAllByCategory($date),
       'transacs' => $transaction->sumAll('amount', $date),
       'trcs' => $transaction->findAllWithJoinAndLimit($columns, $joins, $date),

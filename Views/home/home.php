@@ -3,7 +3,7 @@
 use App\Utils\Utils;
 
  if (isset($_SESSION['error']) && !empty($_SESSION["error"])) : ?>
-  <div class="alart alert-danger" role='alert'>
+  <div class="alert alert-danger" role='alert'>
     <?php echo $_SESSION["error"];
     unset($_SESSION['error']); ?>
   </div>
@@ -21,18 +21,18 @@ require_once ROOT . '/Views/inc/header.php';
   <!-- CALENDAR -->
   <aside class="darkerbg border-radius-20 p-4 d-none d-md-flex d-lg-block justify-content-between">
     <p class="my-4"><a href="index?p=home/date/<?= date('Y') ; ?>" id='year' class="text-dark underline-none">2024</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Jan</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Fev</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Mar</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Avr</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Mai</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Jui</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Juil</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Aou</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Sep</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Oct</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Nov</a></p>
-    <p class="my-4"><a href="index?p=home/date/<?= date('n') ; ?>" class="text-dark underline-none">Dec</a></p>
+    <p class="my-4"><a href="index?p=home/date/1" class="text-dark underline-none">Jan</a></p>
+    <p class="my-4"><a href="index?p=home/date/2" class="text-dark underline-none">Fev</a></p>
+    <p class="my-4"><a href="index?p=home/date/3" class="text-dark underline-none">Mar</a></p>
+    <p class="my-4"><a href="index?p=home/date/4" class="text-dark underline-none">Avr</a></p>
+    <p class="my-4"><a href="index?p=home/date/5" class="text-dark underline-none">Mai</a></p>
+    <p class="my-4"><a href="index?p=home/date/6" class="text-dark underline-none">Jui</a></p>
+    <p class="my-4"><a href="index?p=home/date/7" class="text-dark underline-none">Juil</a></p>
+    <p class="my-4"><a href="index?p=home/date/8" class="text-dark underline-none">Aou</a></p>
+    <p class="my-4"><a href="index?p=home/date/9" class="text-dark underline-none">Sep</a></p>
+    <p class="my-4"><a href="index?p=home/date/10" class="text-dark underline-none">Oct</a></p>
+    <p class="my-4"><a href="index?p=home/date/11" class="text-dark underline-none">Nov</a></p>
+    <p class="my-4"><a href="index?p=home/date/12" class="text-dark underline-none">Dec</a></p>
   </aside>
 
   <main class="w-100 my-3">
@@ -59,7 +59,7 @@ require_once ROOT . '/Views/inc/header.php';
           <h2 class="text-white"> 0€</h2>
         <?php endif ?>
       </div>
-      <a href="index?p=income/index" class="col-lg-2 col-md-6 col-sm-6 darkerbg border-radius-20 py-3 ps-3 underline-none">
+      <a href="index?p=income" class="col-lg-2 col-md-6 col-sm-6 darkerbg border-radius-20 py-3 ps-3 underline-none">
         <h6 class="colorOther">Revenu</h6>
 
         <?php if (!empty($incomes)) :
@@ -87,7 +87,7 @@ require_once ROOT . '/Views/inc/header.php';
           <h2 class="text-dark">0€</h2>
         <?php endif; ?>
       </div>
-      <a href="index?p=saving/index" class="col-lg-3 col-md-6 col-sm-6 greenRadient border-radius-20 py-3 ps-3 underline-none">
+      <div class="col-lg-3 col-md-6 col-sm-6 greenRadient border-radius-20 py-3 ps-3 underline-none">
         <h6 class="colorGreen">Economie</h6>
 
         <?php if (!empty($savings)) :
@@ -101,7 +101,7 @@ require_once ROOT . '/Views/inc/header.php';
           <h2 class="text-white">0€</h2>
         <?php endif; ?>
 
-      </a>
+      </div>
     </section>
 
     <section class='d-sm-block d-lg-flex  gap-4'>
@@ -170,14 +170,14 @@ require_once ROOT . '/Views/inc/header.php';
             </table>
           </a>
 
-          <a href="index?p=income/index" class="underline-none darkerbg border-radius-20 col-4 ms-4 p-3">
+          <a href="index?p=income" class="underline-none darkerbg border-radius-20 col-4 ms-4 p-3">
             <h4 class="colorOther mb-5">Type de revenus</h4>
             <canvas id="myChart" class="w-100 h-75 mb-3"></canvas>
           </a>
         </div>
 
         <!-- GOALS -->
-        <a href="index?p=goal/index" class="m-3  border-radius-20 underline-none "> 
+        <a href="index?p=goal" class="m-3  border-radius-20 underline-none "> 
           <div class="border-radius-20 p-2 darkerbg">
           <h4 class="colorOther p-2">Objectifs</h4>
 

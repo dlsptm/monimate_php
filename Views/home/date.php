@@ -2,8 +2,15 @@
 
 use App\Utils\Utils;
 
- if (isset($_SESSION['error']) && !empty($_SESSION["error"])) : ?>
-  <div class="alart alert-danger" role='alert'>
+
+$url = $_SERVER['REQUEST_URI'];
+$url = explode('/', $url);
+$date = array_pop($url);
+
+
+
+if (isset($_SESSION['error']) && !empty($_SESSION["error"])) : ?>
+  <div class="alert alert-danger" role='alert'>
     <?php echo $_SESSION["error"];
     unset($_SESSION['error']); ?>
   </div>
@@ -20,7 +27,7 @@ require_once ROOT . '/Views/inc/header.php';
 <div class="mt-3 mx-5 d-lg-flex d-xl-flex gap-5">
   <!-- CALENDAR -->
   <aside class="darkerbg border-radius-20 p-4 d-none d-md-flex d-lg-block justify-content-between">
-    <p class="my-4"><a href="index?p=home/date/<?= date('Y') ; ?>" id='year' class="text-dark underline-none">2024</a></p>
+    <p class="my-4"><a href="index?p=home/date/<?= date('Y'); ?>" id='year' class="text-dark underline-none">2024</a></p>
     <p class="my-4"><a href="index?p=home/date/1" class="text-dark underline-none">Jan</a></p>
     <p class="my-4"><a href="index?p=home/date/2" class="text-dark underline-none">Fev</a></p>
     <p class="my-4"><a href="index?p=home/date/3" class="text-dark underline-none">Mar</a></p>
@@ -110,34 +117,35 @@ require_once ROOT . '/Views/inc/header.php';
         <h4 class="colorOther mb-5">Catégories</h4>
         <div class='d-none d-md-flex d-lg-block'>
           <?php foreach ($categories as $category) : ?>
-            <a href="index?p=transaction/category/<?= $category->id ; ?>" class="underline-none text-black">
-            <article class="d-flex align-items-center my-3">
-              <figure class="<?= strtolower($category->title); ?> border-radius-customized">
-                <img src="assets/upload/categories_icon/<?= $category->icon; ?>" alt="<?= $category->title; ?>" class=" p-2 opacity-20" id="category-icon">
-              </figure>
-              <div class="d-flex flex-column mx-4">
-                <p class="m-0 fs-6"><?= $category->title; ?></p>
-                <?php $found = false; ?>
-                <?php foreach ($transactions as $transaction) : ?>
-                  <?php if ($transaction->user_id == $_SESSION['user']['id'] && $transaction->category_id == $category->id) : ?>
-                    <p class="fs-3 m-0 text-md"><?= Utils::numberFormat($transaction->total_amount) ?> €</p>
-                    <?php $found = true; ?>
+            <a href="index?p=transaction/category/<?= $category->id; ?>" class="underline-none">
+              <article class="d-flex align-items-center my-3">
+                <figure class="<?= strtolower($category->title); ?> border-radius-customized">
+                  <img src="assets/upload/categories_icon/<?= $category->icon; ?>" alt="<?= $category->title; ?>" class=" p-2 opacity-20" id="category-icon">
+                </figure>
+                <div class="d-flex flex-column mx-4">
+                  <p class="m-0 fs-6"><?= $category->title; ?></p>
+                  <?php $found = false; ?>
+                  <?php foreach ($transactions as $transaction) : ?>
+                    <?php if ($transaction->user_id == $_SESSION['user']['id'] && $transaction->category_id == $category->id) : ?>
+                      <p class="fs-3 m-0 text-md"><?= Utils::numberFormat($transaction->total_amount) ?> €</p>
+                      <?php $found = true; ?>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
+                  <?php if (!$found) : ?>
+                    <p class="fs-3 text-md">0 €</p>
                   <?php endif; ?>
-                <?php endforeach; ?>
-                <?php if (!$found) : ?>
-                  <p class="fs-3 text-md">0 €</p>
-                <?php endif; ?>
-              </div>
-            </article>
+                </div>
+              </article>
             </a>
           <?php endforeach; ?>
         </div>
       </div>
 
       <!-- TRANSACTIONS -->
+
       <div>
         <div class="m-3 d-sm-block d-lg-flex">
-          <a href="index?p=transaction/read" class="underline-none darkerbg table-responsive p-2 border-radius-20 col-8">
+          <a href="index?p=transaction/read/<?= $date; ?>" class="underline-none darkerbg table-responsive p-2 border-radius-20 col-8">
             <table class=" table">
               <thead>
                 <tr class="table-light">
@@ -162,7 +170,8 @@ require_once ROOT . '/Views/inc/header.php';
                         <figure class="<?= strtolower($trc->category_title); ?> border-radius-customized">
                           <img src="assets/upload/categories_icon/<?= $trc->category_icon; ?>" alt="<?= $trc->category_title; ?>" class=" p-1 opacity-20" width="30">
                         </figure> <?= $trc->category_title; ?>
-                      </td>                    </tr>
+                      </td>
+                    </tr>
                 <?php
                   endif;
                 endforeach ?>
@@ -177,22 +186,23 @@ require_once ROOT . '/Views/inc/header.php';
         </div>
 
         <!-- GOALS -->
-        <a href="index?p=goal/index" class="m-3  border-radius-20 underline-none "> 
+        <a href="index?p=goal/index" class="m-3  border-radius-20 underline-none ">
           <div class="border-radius-20 p-2 darkerbg">
-          <h4 class="colorOther p-2">Objectifs</h4>
+            <h4 class="colorOther p-2">Objectifs</h4>
 
-          <?php
-          foreach ($goals as $goal) :
-            if ($goal->user_id == $_SESSION['user']['id']):
-            foreach ($savings as $saving) :
-          ?>
-              <p class="text-end text-black"> <?= Utils::numberFormat($saving->total_amount) . '€ / ' . Utils::numberFormat($goal->amount); ?>€ </p>
-              <div class="progress mx-3 mb-3">
-                <div class="progress-bar orangeRadiant" role="progressbar" aria-valuenow="<?= (Utils::numberformat($saving->total_amount / $goal->amount)) * 100; ?>" aria-valuemin="0" aria-valuemax="100"><?= $goal->title; ?></div>
-              </div>
-          <?php
-            endforeach;
-          endif; endforeach; ?>
+            <?php
+            foreach ($goals as $goal) :
+              if ($goal->user_id == $_SESSION['user']['id']) :
+                foreach ($savings as $saving) :
+            ?>
+                  <p class="text-end"> <?= Utils::numberFormat($saving->total_amount) . '€ / ' . Utils::numberFormat($goal->amount); ?>€ </p>
+                  <div class="progress mx-3 mb-3">
+                    <div class="progress-bar orangeRadiant" role="progressbar" aria-valuenow="<?= (Utils::numberformat($saving->total_amount / $goal->amount)) * 100; ?>" aria-valuemin="0" aria-valuemax="100"><?= $goal->title; ?></div>
+                  </div>
+            <?php
+                endforeach;
+              endif;
+            endforeach; ?>
           </div>
         </a>
 

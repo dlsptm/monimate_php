@@ -78,8 +78,8 @@ class GoalController extends Controller
 
     // Afficher le formulaire
     $this->render('goal/index', [
-      'title' => $id ? 'Modifier une économie' : 'Ajouter une une économie',
-      'description' => 'ceci est la description',
+      'title' => $id ? 'Modifier un objectif' : 'Ajouter un objectif',
+      'description' => 'gestionnaire de vos objectifs',
       'form' => $form->create(),
       'goals' => $goal->findAll()
     ]);

@@ -13,9 +13,6 @@ require_once ROOT.'/Views/inc/header.php';
 ?>
 
 <div class="container">
-<h1>S'inscrire</h1>
+<h1>Modifier votre pseudo</h1>
 <?= $form ; ?>
-<div>
-  <a href="index?p=security/login" class="btn">Déjà un compte ?</a>
-  </div>
-  </div>
+</div>

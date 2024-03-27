@@ -24,6 +24,9 @@
             $sql.= " AND MONTH(created_at) = $date";
           }
 
+          $sql .= " ORDER BY id DESC";
+          $sql .= " LIMIT 3"; // Ajout de la limite
+
       return $this->sql($sql)->fetchAll();
     }
     

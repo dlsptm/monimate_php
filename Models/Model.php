@@ -52,7 +52,7 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
   }
 
   // Modèle Transaction
-  public function findAllWithJoin(string $columns, array $joins)
+  public function findAllWithJoin(string $columns, array $joins, $date=null)
   {
     $alias = strtolower(substr($this->table, 0, 1));
     $sql = "SELECT $columns FROM $this->table $alias";
@@ -62,6 +62,12 @@ class Model extends Db // Déclarer la classe Model qui étend la classe Db
     // inner join retourne uniquement les colones avec des jointures
     foreach ($joins as $join) {
       $sql .= " LEFT JOIN {$join['table']} ON {$join['condition']}";
+    }
+
+    if (isset($date) && strlen($date) == 4) {
+      $sql.= " WHERE YEAR($alias.created_at) = $date";
+    } else if (isset($date)){
+      $sql.= " WHERE MONTH($alias.created_at) = $date";
     }
 
     $sql .= " ORDER BY $alias.id DESC";

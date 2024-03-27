@@ -46,6 +46,10 @@ body {
   max-width: 100%;
 }
 
+.link-custom {
+  color: var(--black);
+}
+
 .darkerbg {
   background: var(--darkerbg);
 }

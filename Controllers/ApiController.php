@@ -4,6 +4,7 @@
   namespace App\Controllers;
 
 use App\Models\Income;
+use App\Models\User;
 
   class ApiController extends Controller
   {
@@ -17,9 +18,19 @@ use App\Models\Income;
   
         header('Content-Type: application/json');
         echo json_encode($getIncome) ;
-  
-  
+
     }
+
+    static public function getMode ()
+    {
+      $id = $_SESSION['user']['id'];
+      $user = new User;
+      $getMode = $user->getMode($id);
+
+      header('Content-Type: application/json');
+      echo json_encode($getMode) ;
+    }
+    
   }
 
 ?>
